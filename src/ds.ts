@@ -9,7 +9,7 @@ import Strings from "./strings";
  */
 export interface IListItem extends Types.SP.ListItem {
     ClientId: string;
-    Owners: { results: { Id: number; Title: string }[] };
+    Owners: { results: { Id: number; EMail: string; Title: string }[] };
     OwnersId: { results: [] };
     SiteUrls: string;
     Status: string;
@@ -29,8 +29,13 @@ export class DataSource {
             this._list = new List<IListItem>({
                 listName: Strings.Lists.Main,
                 itemQuery: {
+                    Expand: ["Owners"],
                     GetAllItems: true,
                     OrderBy: ["Title"],
+                    Select: [
+                        "Title", "ClientId", "OwnersId", "SiteUrls", "Status",
+                        "Owners/Title", "Owners/Id", "Owners/EMail"
+                    ],
                     Top: 5000
                 },
                 onInitError: reject,

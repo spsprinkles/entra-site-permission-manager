@@ -96,9 +96,9 @@ export class App {
                         onRenderCell: (el, column, item: IListItem) => {
                             // Render the application information
                             el.innerHTML = `
-                                <b>Name:</b>${item.Title}
+                                <b class="me-2">Name:</b>${item.Title}
                                 <br/>
-                                <b>Client Id:</b>${item.ClientId}
+                                <b class="me-2">Client Id:</b>${item.ClientId}
                             `;
                         }
                     },
@@ -111,45 +111,55 @@ export class App {
                         title: "Site Urls"
                     },
                     {
-                        name: "Owners",
+                        name: "",
                         title: "Owners",
                         onRenderCell: (el, column, item: IListItem) => {
-                            // TODO
+                            let users = item.Owners?.results || [];
+
+                            // Render the user information
+                            el.innerHTML = users.join(', ');
                         }
                     },
                     {
                         name: "",
-                        title: "Title",
+                        title: "Actions",
                         onRenderCell: (el, column, item: IListItem) => {
                             // Render a buttons
-                            Components.ButtonGroup({
+                            Components.TooltipGroup({
                                 el,
-                                buttons: [
+                                isSmall: true,
+                                tooltips: [
                                     {
-                                        text: item.Title,
-                                        type: Components.ButtonTypes.OutlinePrimary,
-                                        onClick: () => {
-                                            // Show the display form
-                                            DataSource.List.viewForm({
-                                                itemId: item.Id
-                                            });
+                                        content: "Views the request.",
+                                        btnProps: {
+                                            text: "View",
+                                            type: Components.ButtonTypes.OutlinePrimary,
+                                            onClick: () => {
+                                                // Show the display form
+                                                DataSource.List.viewForm({
+                                                    itemId: item.Id
+                                                });
+                                            }
                                         }
                                     },
                                     {
-                                        text: "Edit",
-                                        type: Components.ButtonTypes.OutlineSuccess,
-                                        onClick: () => {
-                                            // Show the edit form
-                                            DataSource.List.editForm({
-                                                itemId: item.Id,
-                                                onUpdate: () => {
-                                                    // Refresh the data
-                                                    DataSource.refresh(item.Id).then(() => {
-                                                        // Refresh the table
-                                                        dashboard.refresh(DataSource.ListItems);
-                                                    });
-                                                }
-                                            });
+                                        content: "Edits the request",
+                                        btnProps: {
+                                            text: "Edit",
+                                            type: Components.ButtonTypes.OutlineSuccess,
+                                            onClick: () => {
+                                                // Show the edit form
+                                                DataSource.List.editForm({
+                                                    itemId: item.Id,
+                                                    onUpdate: () => {
+                                                        // Refresh the data
+                                                        DataSource.refresh(item.Id).then(() => {
+                                                            // Refresh the table
+                                                            dashboard.refresh(DataSource.ListItems);
+                                                        });
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                 ]
