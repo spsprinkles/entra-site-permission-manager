@@ -17,7 +17,7 @@ const Strings = {
     AppElementId: "entra-site-manager",
     GlobalVariable: "EntraSiteManager",
     Lists: {
-        Main: "Site Permissions"
+        Main: "Site Manager"
     },
     ProjectName: "Entra ID Site Manager",
     ProjectDescription: "Dashboard to manage site permission requests for apps using the graph api.",
