@@ -30,6 +30,13 @@ export class InstallationModal {
                 // Show the dialog
                 InstallationRequired.showDialog({
                     errors,
+                    onInstalled: () => {
+                        // Show the security menu
+                        Security.show(() => {
+                            // Refresh the page
+                            window.location.reload();
+                        });
+                    },
                     onFooterRendered: el => {
                         // See if the security group doesn't exist
                         if (showFl) {
