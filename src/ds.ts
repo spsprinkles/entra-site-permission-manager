@@ -23,7 +23,6 @@ export interface IListItem extends Types.SP.ListItem {
     ClientId: string;
     Owners: { results: { Id: number; EMail: string; Title: string }[] };
     OwnersId: { results: [] };
-    Permission: string;
     SiteUrls: string;
     Status: string;
 }

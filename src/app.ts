@@ -255,7 +255,7 @@ export class App {
                                                 DataSource.runFlow({
                                                     appName: item.Title,
                                                     id: item.Id,
-                                                    permission: (item.Permission || "").toLowerCase(),
+                                                    permission: "read",
                                                     type: "Add",
                                                     url: siteUrls[0]
                                                 }).then(

@@ -42,16 +42,6 @@ export const Configuration = Helper.SPConfig({
                     required: true
                 } as Helper.IFieldInfoUser,
                 {
-                    name: "Permission",
-                    title: "Permission",
-                    type: Helper.SPCfgFieldType.Choice,
-                    defaultValue: "Read",
-                    required: true,
-                    choices: [
-                        "Read", "Write", "Owner"
-                    ]
-                } as Helper.IFieldInfoChoice,
-                {
                     name: "SiteUrls",
                     title: "Site Urls",
                     description: "Each url must be on a separate line.",
