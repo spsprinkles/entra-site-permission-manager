@@ -1,4 +1,4 @@
-import { ContextInfo } from "gd-sprest-bs";
+import { ContextInfo, SPTypes } from "gd-sprest-bs";
 
 // Sets the context information
 // This is for SPFx or Teams solutions
@@ -15,6 +15,11 @@ export const setContext = (context, sourceUrl?: string) => {
  */
 const Strings = {
     AppElementId: "entra-site-manager",
+    CloudEnv: SPTypes.CloudEnvironment.Default,
+    Flows: {
+        Add: "be1edf84-e914-4896-a236-50080778e2bd",
+        Remove: ""
+    },
     GlobalVariable: "EntraSiteManager",
     Lists: {
         Main: "Site Manager"

@@ -48,7 +48,7 @@ export const Configuration = Helper.SPConfig({
                     defaultValue: "Read",
                     required: true,
                     choices: [
-                        "Read", "Write", "Manage", "Full Control"
+                        "Read", "Write", "Owner"
                     ]
                 } as Helper.IFieldInfoChoice,
                 {

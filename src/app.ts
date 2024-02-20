@@ -1,4 +1,4 @@
-import { Dashboard, Modal } from "dattatable";
+import { Dashboard, LoadingDialog, Modal } from "dattatable";
 import { Components, Helper, Types } from "gd-sprest-bs";
 import { filterSquare } from "gd-sprest-bs/build/icons/svgs/filterSquare";
 import * as jQuery from "jquery";
@@ -239,6 +239,37 @@ export class App {
                                                     Modal.FooterElement.classList.add("d-none");
                                                     Modal.show();
                                                 });
+                                            }
+                                        }
+                                    },
+                                    {
+                                        content: DataSource.HasLicense ? "Testing flow triggers..." : "User doesn't have license to trigger flow",
+                                        btnProps: {
+                                            text: "Add Permission",
+                                            isDisabled: !DataSource.HasLicense,
+                                            onClick: () => {
+                                                LoadingDialog.setHeader("Running Flow");
+                                                LoadingDialog.setBody("This will close after it's done...");
+                                                LoadingDialog.show();
+                                                let siteUrls = item.SiteUrls.split('\n');
+                                                DataSource.runFlow({
+                                                    appName: item.Title,
+                                                    id: item.Id,
+                                                    permission: (item.Permission || "").toLowerCase(),
+                                                    type: "Add",
+                                                    url: siteUrls[0]
+                                                }).then(
+                                                    () => {
+                                                        LoadingDialog.hide();
+                                                    },
+                                                    errMessage => {
+                                                        LoadingDialog.hide();
+                                                        Modal.setHeader("Error Running Flow");
+                                                        Modal.setBody(errMessage);
+                                                        Modal.FooterElement.classList.add("d-none");
+                                                        Modal.show();
+                                                    }
+                                                );
                                             }
                                         }
                                     }

@@ -1,7 +1,19 @@
 import { List } from "dattatable";
-import { Components, Graph, Site, SPTypes, Types, v2, Web } from "gd-sprest-bs";
+import { Components, Graph, List as SPList, Site, SPTypes, Types, v2, Web } from "gd-sprest-bs";
 import { Security } from "./security";
 import Strings from "./strings";
+
+/**
+ * Flow Properties
+ */
+export interface IFlowProps {
+    appName: string;
+    id: number;
+    permission: string;
+    token?: string;
+    type: "Add" | "Remove";
+    url: string;
+}
 
 /**
  * List Item
@@ -11,6 +23,7 @@ export interface IListItem extends Types.SP.ListItem {
     ClientId: string;
     Owners: { results: { Id: number; EMail: string; Title: string }[] };
     OwnersId: { results: [] };
+    Permission: string;
     SiteUrls: string;
     Status: string;
 }
@@ -26,17 +39,19 @@ export class DataSource {
         // Return a promise
         return new Promise((resolve) => {
             // Get the graph token
-            Graph.getAccessToken().execute(token => {
+            Graph.getAccessToken(Strings.CloudEnv).execute(token => {
                 // Get the current user licenses
                 Graph({
                     accessToken: token.access_token,
+                    cloud: Strings.CloudEnv,
                     url: "me?$select=displayName,email,id,assignedLicenses,assignedPlans"
                 }).execute(user => {
                     // Parse the plans
                     let assignedPlans: any[] = user["assignedPlans"];
                     for (let i = 0; i < assignedPlans.length; i++) {
                         // See if they have a power apps license assigned
-                        if (assignedPlans[i].service.indexOf("Power") >= 0) {
+                        let plan = assignedPlans[i];
+                        if (plan.service.indexOf("Power") >= 0 && plan.capabilityStatus == "Enabled") {
                             // Set the flag
                             this._hasLicense = true;
                             break;
@@ -64,7 +79,7 @@ export class DataSource {
                     GetAllItems: true,
                     OrderBy: ["Title"],
                     Select: [
-                        "Title", "ClientId", "OwnersId", "SiteUrls", "Status",
+                        "Id", "Title", "ClientId", "OwnersId", "SiteUrls", "Status",
                         "Permission", "Owners/Title", "Owners/Id", "Owners/EMail"
                     ],
                     Top: 5000
@@ -144,6 +159,48 @@ export class DataSource {
         return new Promise((resolve, reject) => {
             // Refresh the data
             DataSource.List.refreshItem(itemId).then(resolve, reject);
+        });
+    }
+
+    // Runs a flow
+    private static _token: string = null;
+    static runFlow(flowProps: IFlowProps): PromiseLike<void> {
+        // Return a promise
+        return new Promise((resolve, reject) => {
+            // Get the site id
+            Site(Strings.SourceUrl).query({ Select: ["Id"] }).execute(site => {
+                let flowId = flowProps.type == "Add" ? Strings.Flows.Add : Strings.Flows.Remove;
+
+                // Run the flow
+                SPList.runFlow({
+                    id: flowId,
+                    list: Strings.Lists.Main,
+                    cloudEnv: Strings.CloudEnv,
+                    token: this._token,
+                    webUrl: Strings.SourceUrl,
+                    data: {
+                        AppName: flowProps.appName,
+                        ID: flowProps.id,
+                        fileName: "",
+                        itemUrl: "",
+                        Permission: flowProps.permission,
+                        SiteId: site.Id,
+                        SiteUrl: flowProps.url,
+                    }
+                }).then(results => {
+                    // Save the token
+                    this._token = results.flowToken;
+
+                    if (results.executed) {
+                        // Resolve w/ the flow token
+                        resolve();
+                    } else {
+                        // Reject the request
+                        console.error("Error running the flow: " + results.errorMessage, results.errorDetails);
+                        reject(results.errorMessage);
+                    }
+                });
+            });
         });
     }
 }
