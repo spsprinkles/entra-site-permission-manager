@@ -10,8 +10,7 @@ export interface IFlowProps {
     appName: string;
     id: number;
     permission: string;
-    token?: string;
-    type: "Add" | "Remove";
+    type: "add" | "remove" | "update";
     url: string;
 }
 
@@ -168,7 +167,18 @@ export class DataSource {
         return new Promise((resolve, reject) => {
             // Get the site id
             Site(Strings.SourceUrl).query({ Select: ["Id"] }).execute(site => {
-                let flowId = flowProps.type == "Add" ? Strings.Flows.Add : Strings.Flows.Remove;
+                let flowId = "";
+                switch (flowProps.type) {
+                    case "add":
+                        flowId = Strings.Flows.Add;
+                        break;
+                    case "remove":
+                        flowId = Strings.Flows.Remove;
+                        break;
+                    case "update":
+                        flowId = Strings.Flows.Update;
+                        break;
+                }
 
                 // Run the flow
                 SPList.runFlow({

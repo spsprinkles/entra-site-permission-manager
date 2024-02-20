@@ -3,6 +3,8 @@ import { Components, Helper, Types } from "gd-sprest-bs";
 import { filterSquare } from "gd-sprest-bs/build/icons/svgs/filterSquare";
 import * as jQuery from "jquery";
 import { DataSource, IListItem } from "./ds";
+import { Forms } from "./forms";
+import { Security } from "./security";
 import Strings from "./strings";
 
 /**
@@ -164,116 +166,87 @@ export class App {
                         name: "",
                         title: "Actions",
                         onRenderCell: (el, column, item: IListItem) => {
+                            let tooltips = [
+                                {
+                                    content: "Views the request.",
+                                    btnProps: {
+                                        text: "View",
+                                        type: Components.ButtonTypes.OutlineSecondary,
+                                        onClick: () => {
+                                            // Show the display form
+                                            DataSource.List.viewForm({
+                                                itemId: item.Id
+                                            });
+                                        }
+                                    }
+                                }
+                            ]
+
+                            // See if the user is a licensed admin
+                            if (Security.IsAdmin && DataSource.HasLicense) {
+                                tooltips.push({
+                                    content: "Edits the request.",
+                                    btnProps: {
+                                        text: "Edit",
+                                        type: Components.ButtonTypes.OutlinePrimary,
+                                        onClick: () => {
+                                            // Show the edit form
+                                            DataSource.List.editForm({
+                                                itemId: item.Id,
+                                                onUpdate: () => {
+                                                    // Refresh the data
+                                                    DataSource.refresh(item.Id).then(() => {
+                                                        // Refresh the table
+                                                        dashboard.refresh(DataSource.ListItems);
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+
+                                tooltips.push({
+                                    content: "Grants access to a site collection.",
+                                    btnProps: {
+                                        text: "Add Permission",
+                                        type: Components.ButtonTypes.OutlinePrimary,
+                                        onClick: () => {
+                                            // Show the add form
+                                            Forms.addPermission(item);
+                                        }
+                                    }
+                                });
+
+                                tooltips.push({
+                                    content: "Edits access to a site collection.",
+                                    btnProps: {
+                                        text: "Edit Permission",
+                                        type: Components.ButtonTypes.OutlinePrimary,
+                                        onClick: () => {
+                                            // Show the add form
+                                            Forms.editPermission(item);
+                                        }
+                                    }
+                                });
+
+                                tooltips.push({
+                                    content: "Removes access to a site collection.",
+                                    btnProps: {
+                                        text: "Remove Permission",
+                                        type: Components.ButtonTypes.OutlinePrimary,
+                                        onClick: () => {
+                                            // Show the add form
+                                            Forms.removePermission(item);
+                                        }
+                                    }
+                                });
+                            }
+
                             // Render a buttons
                             Components.TooltipGroup({
                                 el,
                                 isSmall: true,
-                                tooltips: [
-                                    {
-                                        content: "Views the request.",
-                                        btnProps: {
-                                            text: "View",
-                                            type: Components.ButtonTypes.OutlinePrimary,
-                                            onClick: () => {
-                                                // Show the display form
-                                                DataSource.List.viewForm({
-                                                    itemId: item.Id
-                                                });
-                                            }
-                                        }
-                                    },
-                                    {
-                                        content: "Edits the request",
-                                        btnProps: {
-                                            text: "Edit",
-                                            type: Components.ButtonTypes.OutlineSuccess,
-                                            onClick: () => {
-                                                // Show the edit form
-                                                DataSource.List.editForm({
-                                                    itemId: item.Id,
-                                                    onUpdate: () => {
-                                                        // Refresh the data
-                                                        DataSource.refresh(item.Id).then(() => {
-                                                            // Refresh the table
-                                                            dashboard.refresh(DataSource.ListItems);
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    },
-                                    {
-                                        content: "View the current permissions for this site",
-                                        btnProps: {
-                                            text: "View Permissions",
-                                            onClick: () => {
-                                                let sitePermissions: { [key: string]: Types.Microsoft.Graph.permission[] } = {};
-                                                let items: Components.IAccordionItem[] = [];
-
-                                                // Get the current permissions
-                                                let siteUrls = item.SiteUrls.split('\n');
-                                                Helper.Executor(siteUrls, siteUrl => {
-                                                    // Return a promise
-                                                    return new Promise(resolve => {
-                                                        DataSource.loadSitePermissions(siteUrl).then(permissions => {
-                                                            // Save the permissions
-                                                            sitePermissions[siteUrl] = permissions;
-                                                            items.push({
-                                                                data: permissions,
-                                                                header: siteUrl,
-                                                                onRender: (el, item) => {
-                                                                    // TODO
-                                                                    el.innerHTML = "There are " + item.data.length + " permissions.";
-                                                                }
-                                                            });
-                                                            resolve(null);
-                                                        });
-                                                    });
-                                                }).then(() => {
-                                                    // Display the permissions
-                                                    Modal.setHeader("Site Permissions");
-                                                    Components.Accordion({
-                                                        el: Modal.BodyElement,
-                                                        items
-                                                    });
-                                                    Modal.FooterElement.classList.add("d-none");
-                                                    Modal.show();
-                                                });
-                                            }
-                                        }
-                                    },
-                                    {
-                                        content: DataSource.HasLicense ? "Testing flow triggers..." : "User doesn't have license to trigger flow",
-                                        btnProps: {
-                                            text: "Add Permission",
-                                            isDisabled: !DataSource.HasLicense,
-                                            onClick: () => {
-                                                LoadingDialog.setHeader("Running Flow");
-                                                LoadingDialog.setBody("This will close after it's done...");
-                                                LoadingDialog.show();
-                                                let siteUrls = item.SiteUrls.split('\n');
-                                                DataSource.runFlow({
-                                                    appName: item.Title,
-                                                    id: item.Id,
-                                                    permission: "read",
-                                                    type: "Add",
-                                                    url: siteUrls[0]
-                                                }).then(
-                                                    () => {
-                                                        LoadingDialog.hide();
-                                                    },
-                                                    errMessage => {
-                                                        LoadingDialog.hide();
-                                                        Modal.setHeader("Error Running Flow");
-                                                        Modal.setBody(errMessage);
-                                                        Modal.FooterElement.classList.add("d-none");
-                                                        Modal.show();
-                                                    }
-                                                );
-                                            }
-                                        }
-                                    }
-                                ]
+                                tooltips
                             });
                         }
                     }

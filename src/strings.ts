@@ -18,7 +18,8 @@ const Strings = {
     CloudEnv: SPTypes.CloudEnvironment.Default,
     Flows: {
         Add: "be1edf84-e914-4896-a236-50080778e2bd",
-        Remove: ""
+        Remove: "",
+        Update: ""
     },
     GlobalVariable: "EntraSiteManager",
     Lists: {
