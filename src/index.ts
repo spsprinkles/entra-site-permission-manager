@@ -1,3 +1,4 @@
+import { LoadingDialog } from "dattatable";
 import { ContextInfo, ThemeManager } from "gd-sprest-bs";
 import { App } from "./app";
 import { Configuration } from "./cfg";
@@ -26,10 +27,18 @@ const GlobalVariable = {
         DataSource.init().then(
             // Success
             () => {
+                // Show a loading dialog
+                LoadingDialog.setHeader("Loading the Theme");
+                LoadingDialog.setBody("This will close after the theme is loaded...");
+                LoadingDialog.show();
+
                 // Load the current theme and apply it to the components
                 ThemeManager.load(true).then(() => {
                     // Create the application
                     new App(el);
+
+                    // Hide the loading dialog
+                    LoadingDialog.hide();
                 });
             },
 

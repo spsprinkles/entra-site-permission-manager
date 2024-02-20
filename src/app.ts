@@ -1,5 +1,6 @@
-import { Dashboard } from "dattatable";
-import { Components } from "gd-sprest-bs";
+import { Dashboard, Modal } from "dattatable";
+import { Components, Helper, Types } from "gd-sprest-bs";
+import { filterSquare } from "gd-sprest-bs/build/icons/svgs/filterSquare";
 import * as jQuery from "jquery";
 import { DataSource, IListItem } from "./ds";
 import Strings from "./strings";
@@ -33,6 +34,11 @@ export class App {
             },
             navigation: {
                 title: Strings.ProjectName,
+            },
+            subNavigation: {
+                onRendering: props => {
+                    props.className = "navbar-sub rounded-bottom";
+                },
                 items: [
                     {
                         className: "btn-outline-light",
@@ -48,6 +54,40 @@ export class App {
                                         dashboard.refresh(DataSource.ListItems);
                                     });
                                 }
+                            });
+                        }
+                    }
+                ],
+                itemsEnd: [
+                    {
+                        text: "Filter Services",
+                        onRender: (el, item) => {
+                            // Clear the existing button
+                            el.innerHTML = "";
+                            // Create a span to wrap the icon in
+                            let span = document.createElement("span");
+                            span.className = "bg-white d-inline-flex ms-2 rounded";
+                            el.appendChild(span);
+
+                            // Render a tooltip
+                            Components.Tooltip({
+                                el: span,
+                                content: item.text,
+                                placement: Components.TooltipPlacements.Right,
+                                btnProps: {
+                                    // Render the icon button
+                                    className: "p-1 pe-2",
+                                    iconClassName: "me-1",
+                                    iconType: filterSquare,
+                                    iconSize: 24,
+                                    isSmall: true,
+                                    text: "Filters",
+                                    type: Components.ButtonTypes.OutlineSecondary,
+                                    onClick: () => {
+                                        // Show the filter
+                                        dashboard.showFilter();
+                                    }
+                                },
                             });
                         }
                     }
@@ -158,6 +198,46 @@ export class App {
                                                             dashboard.refresh(DataSource.ListItems);
                                                         });
                                                     }
+                                                });
+                                            }
+                                        }
+                                    },
+                                    {
+                                        content: "View the current permissions for this site",
+                                        btnProps: {
+                                            text: "View Permissions",
+                                            onClick: () => {
+                                                let sitePermissions: { [key: string]: Types.Microsoft.Graph.permission[] } = {};
+                                                let items: Components.IAccordionItem[] = [];
+
+                                                // Get the current permissions
+                                                let siteUrls = item.SiteUrls.split('\n');
+                                                Helper.Executor(siteUrls, siteUrl => {
+                                                    // Return a promise
+                                                    return new Promise(resolve => {
+                                                        DataSource.loadSitePermissions(siteUrl).then(permissions => {
+                                                            // Save the permissions
+                                                            sitePermissions[siteUrl] = permissions;
+                                                            items.push({
+                                                                data: permissions,
+                                                                header: siteUrl,
+                                                                onRender: (el, item) => {
+                                                                    // TODO
+                                                                    el.innerHTML = "There are " + item.data.length + " permissions.";
+                                                                }
+                                                            });
+                                                            resolve(null);
+                                                        });
+                                                    });
+                                                }).then(() => {
+                                                    // Display the permissions
+                                                    Modal.setHeader("Site Permissions");
+                                                    Components.Accordion({
+                                                        el: Modal.BodyElement,
+                                                        items
+                                                    });
+                                                    Modal.FooterElement.classList.add("d-none");
+                                                    Modal.show();
                                                 });
                                             }
                                         }

@@ -19,6 +19,7 @@ export const Configuration = Helper.SPConfig({
                         "Title",
                         "ClientId",
                         "Status",
+                        "Permission",
                         "SiteUrls",
                         "Owners"
                     ]
@@ -75,7 +76,7 @@ export const Configuration = Helper.SPConfig({
                 {
                     ViewName: "All Items",
                     ViewFields: [
-                        "LinkTitle", "Status", "ClientId", "SiteUrls", "Owners"
+                        "LinkTitle", "Status", "ClientId", "Permission", "SiteUrls", "Owners"
                     ]
                 }
             ]
