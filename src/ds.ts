@@ -1,5 +1,5 @@
 import { List } from "dattatable";
-import { Components, Graph, List as SPList, Site, SPTypes, Types, v2, Web } from "gd-sprest-bs";
+import { Components, Graph, List as SPList, Site, Types, v2, Web } from "gd-sprest-bs";
 import { Security } from "./security";
 import Strings from "./strings";
 
@@ -7,9 +7,11 @@ import Strings from "./strings";
  * Flow Properties
  */
 export interface IFlowProps {
+    appId: string;
     appName: string;
     id: number;
-    permission: string;
+    permission?: string;
+    permissionId?: string;
     type: "add" | "remove" | "update";
     url: string;
 }
@@ -23,13 +25,24 @@ export interface IListItem extends Types.SP.ListItem {
     Owners: { results: { Id: number; EMail: string; Title: string }[] };
     OwnersId: { results: [] };
     SiteUrls: string;
-    Status: string;
 }
 
 /**
  * Data Source
  */
 export class DataSource {
+    // Gets the site permission for a client id
+    static getSitePermissions(siteUrl: string): PromiseLike<Types.Microsoft.Graph.permissionCollection> {
+        // Return a promise
+        return new Promise((resolve) => {
+            // Get the site id
+            Site(siteUrl).query({ Select: ["Id"] }).execute(site => {
+                // Get the permissions for this site
+                v2.sites(site.Id).permissions().execute(resolve);
+            });
+        });
+    }
+
     // License Status
     private static _hasLicense: boolean = false;
     static HasLicense(): boolean { return this._hasLicense; }
@@ -42,7 +55,7 @@ export class DataSource {
                 Graph({
                     accessToken: token.access_token,
                     cloud: Strings.CloudEnv,
-                    url: "me?$select=displayName,email,id,assignedLicenses,assignedPlans"
+                    url: "me?$select=displayName,email,id,assignedPlans"
                 }).execute(user => {
                     // Parse the plans
                     let assignedPlans: any[] = user["assignedPlans"];
@@ -77,66 +90,19 @@ export class DataSource {
                     GetAllItems: true,
                     OrderBy: ["Title"],
                     Select: [
-                        "Id", "Title", "ClientId", "OwnersId", "SiteUrls", "Status",
-                        "Permission", "Owners/Title", "Owners/Id", "Owners/EMail"
+                        "Id", "Title", "ClientId", "SiteUrls",
+                        "OwnersId", "Owners/Title", "Owners/Id", "Owners/EMail"
                     ],
                     Top: 5000
                 },
                 onInitError: reject,
-                onInitialized: () => {
-                    // Load the status filters
-                    this.loadStatusFilters().then(() => {
-                        // Resolve the request
-                        resolve();
-                    }, reject);
-                }
+                onInitialized: resolve
             });
         });
     }
 
     // List Items
     static get ListItems(): IListItem[] { return this.List.Items; }
-
-    // Loads the current permission for a site
-    static loadSitePermissions(url: string): PromiseLike<Types.Microsoft.Graph.permission[]> {
-        // Return a promise
-        return new Promise((resolve, reject) => {
-            // Get the site id
-            Site(url).query({ Select: ["Id"] }).execute(site => {
-                // Get the site permissions
-                v2.sites(site.Id).permissions().execute(permissions => {
-                    // Resolve the request
-                    resolve(permissions.results);
-                });
-            }, reject);
-        });
-    }
-
-    // Status Filters
-    private static _statusFilters: Components.ICheckboxGroupItem[] = null;
-    static get StatusFilters(): Components.ICheckboxGroupItem[] { return this._statusFilters; }
-    static loadStatusFilters(): PromiseLike<Components.ICheckboxGroupItem[]> {
-        // Return a promise
-        return new Promise((resolve, reject) => {
-            // Get the status field
-            Web(Strings.SourceUrl).Lists(Strings.Lists.Main).Fields("Status").execute((fld: Types.SP.FieldChoice) => {
-                let items: Components.ICheckboxGroupItem[] = [];
-
-                // Parse the choices
-                for (let i = 0; i < fld.Choices.results.length; i++) {
-                    // Add an item
-                    items.push({
-                        label: fld.Choices.results[i],
-                        type: Components.CheckboxGroupTypes.Switch
-                    });
-                }
-
-                // Set the filters and resolve the promise
-                this._statusFilters = items;
-                resolve(items);
-            }, reject);
-        });
-    }
 
     // Initializes the application
     static init(): PromiseLike<any> {
@@ -170,13 +136,13 @@ export class DataSource {
                 let flowId = "";
                 switch (flowProps.type) {
                     case "add":
-                        flowId = Strings.Flows.Add;
+                        flowId = Strings.FlowId;
                         break;
                     case "remove":
-                        flowId = Strings.Flows.Remove;
+                        flowId = Strings.FlowId;
                         break;
                     case "update":
-                        flowId = Strings.Flows.Update;
+                        flowId = Strings.FlowId;
                         break;
                 }
 
@@ -188,11 +154,14 @@ export class DataSource {
                     token: this._token,
                     webUrl: Strings.SourceUrl,
                     data: {
+                        AppId: flowProps.appId,
                         AppName: flowProps.appName,
                         ID: flowProps.id,
                         fileName: "",
                         itemUrl: "",
                         Permission: flowProps.permission,
+                        PermissionId: flowProps.permissionId,
+                        RequestType: flowProps.type,
                         SiteId: site.Id,
                         SiteUrl: flowProps.url,
                     }
@@ -200,6 +169,7 @@ export class DataSource {
                     // Save the token
                     this._token = results.flowToken;
 
+                    // See if the flow was executed successfully
                     if (results.executed) {
                         // Resolve w/ the flow token
                         resolve();

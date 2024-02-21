@@ -1,5 +1,5 @@
-import { Dashboard, LoadingDialog, Modal } from "dattatable";
-import { Components, Helper, Types } from "gd-sprest-bs";
+import { Dashboard } from "dattatable";
+import { Components } from "gd-sprest-bs";
 import { filterSquare } from "gd-sprest-bs/build/icons/svgs/filterSquare";
 import * as jQuery from "jquery";
 import { DataSource, IListItem } from "./ds";
@@ -24,16 +24,6 @@ export class App {
             el,
             hideHeader: true,
             useModal: true,
-            filters: {
-                items: [{
-                    header: "By Status",
-                    items: DataSource.StatusFilters,
-                    onFilter: (value: string) => {
-                        // Filter the table
-                        dashboard.filter(1, value);
-                    }
-                }]
-            },
             navigation: {
                 title: Strings.ProjectName,
             },
@@ -43,7 +33,7 @@ export class App {
                 },
                 items: [
                     {
-                        className: "btn-outline-light",
+                        className: "btn-outline-dark",
                         text: "Create Item",
                         isButton: true,
                         onClick: () => {
@@ -56,40 +46,6 @@ export class App {
                                         dashboard.refresh(DataSource.ListItems);
                                     });
                                 }
-                            });
-                        }
-                    }
-                ],
-                itemsEnd: [
-                    {
-                        text: "Filter Services",
-                        onRender: (el, item) => {
-                            // Clear the existing button
-                            el.innerHTML = "";
-                            // Create a span to wrap the icon in
-                            let span = document.createElement("span");
-                            span.className = "bg-white d-inline-flex ms-2 rounded";
-                            el.appendChild(span);
-
-                            // Render a tooltip
-                            Components.Tooltip({
-                                el: span,
-                                content: item.text,
-                                placement: Components.TooltipPlacements.Right,
-                                btnProps: {
-                                    // Render the icon button
-                                    className: "p-1 pe-2",
-                                    iconClassName: "me-1",
-                                    iconType: filterSquare,
-                                    iconSize: 24,
-                                    isSmall: true,
-                                    text: "Filters",
-                                    type: Components.ButtonTypes.OutlineSecondary,
-                                    onClick: () => {
-                                        // Show the filter
-                                        dashboard.showFilter();
-                                    }
-                                },
                             });
                         }
                     }
@@ -143,10 +99,6 @@ export class App {
                                 <b class="me-2">Client Id:</b>${item.ClientId}
                             `;
                         }
-                    },
-                    {
-                        name: "Status",
-                        title: "Status"
                     },
                     {
                         name: "SiteUrls",

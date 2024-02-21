@@ -43,7 +43,7 @@ export class Security {
                     {
                         listName: Strings.Lists.Main,
                         groupName: ListSecurityDefaultGroups.Visitors,
-                        permission: SPTypes.RoleType.Contributor
+                        permission: SPTypes.RoleType.Reader
                     }
                 ],
                 onGroupsLoaded: () => {

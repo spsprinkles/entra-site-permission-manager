@@ -18,8 +18,6 @@ export const Configuration = Helper.SPConfig({
                     FieldRefs: [
                         "Title",
                         "ClientId",
-                        "Status",
-                        "Permission",
                         "SiteUrls",
                         "Owners"
                     ]
@@ -47,26 +45,16 @@ export const Configuration = Helper.SPConfig({
                     description: "Each url must be on a separate line.",
                     type: Helper.SPCfgFieldType.Note,
                     required: true,
-                    noteType: SPTypes.FieldNoteType.TextOnly
-                } as Helper.IFieldInfoNote,
-                {
-                    name: "Status",
-                    title: "Status",
-                    type: Helper.SPCfgFieldType.Choice,
-                    defaultValue: "Submitted",
-                    required: true,
+                    noteType: SPTypes.FieldNoteType.TextOnly,
                     showInEditForm: false,
-                    showInNewForm: false,
-                    choices: [
-                        "Submitted", "Approved", "Completed"
-                    ]
-                } as Helper.IFieldInfoChoice
+                    showInNewForm: false
+                } as Helper.IFieldInfoNote
             ],
             ViewInformation: [
                 {
                     ViewName: "All Items",
                     ViewFields: [
-                        "LinkTitle", "Status", "ClientId", "Permission", "SiteUrls", "Owners"
+                        "LinkTitle", "ClientId", "Owners", "SiteUrls"
                     ]
                 }
             ]
