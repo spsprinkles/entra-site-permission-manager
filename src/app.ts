@@ -11,16 +11,27 @@ import Strings from "./strings";
  * Main Application
  */
 export class App {
+    private _dashboard: Dashboard = null;
+
     // Constructor
     constructor(el: HTMLElement) {
         // Render the dashboard
         this.render(el);
     }
 
+    // Refreshes the dashboard
+    private refresh(itemId: number) {
+        // Refresh the data
+        DataSource.refresh(itemId).then(() => {
+            // Refresh the table
+            this._dashboard.refresh(DataSource.ListItems);
+        });
+    }
+
     // Renders the dashboard
     private render(el: HTMLElement) {
         // Create the dashboard
-        let dashboard = new Dashboard({
+        this._dashboard = new Dashboard({
             el,
             hideHeader: true,
             useModal: true,
@@ -39,12 +50,9 @@ export class App {
                         onClick: () => {
                             // Show the new form
                             DataSource.List.newForm({
-                                onUpdate: (item: IListItem) => {
-                                    // Refresh the data
-                                    DataSource.refresh(item.Id).then(() => {
-                                        // Refresh the table
-                                        dashboard.refresh(DataSource.ListItems);
-                                    });
+                                onUpdate: item => {
+                                    // Refresh the dashboard
+                                    this.refresh(item.Id);
                                 }
                             });
                         }
@@ -146,11 +154,8 @@ export class App {
                                             DataSource.List.editForm({
                                                 itemId: item.Id,
                                                 onUpdate: () => {
-                                                    // Refresh the data
-                                                    DataSource.refresh(item.Id).then(() => {
-                                                        // Refresh the table
-                                                        dashboard.refresh(DataSource.ListItems);
-                                                    });
+                                                    // Refresh the dashboard
+                                                    this.refresh(item.Id);
                                                 }
                                             });
                                         }
@@ -164,7 +169,10 @@ export class App {
                                         type: Components.ButtonTypes.OutlinePrimary,
                                         onClick: () => {
                                             // Show the add form
-                                            Forms.addPermission(item);
+                                            Forms.addPermission(item, () => {
+                                                // Refresh the dashboard
+                                                this.refresh(item.Id);
+                                            });
                                         }
                                     }
                                 });
@@ -176,7 +184,10 @@ export class App {
                                         type: Components.ButtonTypes.OutlinePrimary,
                                         onClick: () => {
                                             // Show the add form
-                                            Forms.editPermission(item);
+                                            Forms.editPermission(item, () => {
+                                                // Refresh the dashboard
+                                                this.refresh(item.Id);
+                                            });
                                         }
                                     }
                                 });
@@ -188,7 +199,10 @@ export class App {
                                         type: Components.ButtonTypes.OutlinePrimary,
                                         onClick: () => {
                                             // Show the add form
-                                            Forms.removePermission(item);
+                                            Forms.removePermission(item, () => {
+                                                // Refresh the dashboard
+                                                this.refresh(item.Id);
+                                            });
                                         }
                                     }
                                 });

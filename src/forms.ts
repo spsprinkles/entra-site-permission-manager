@@ -8,7 +8,7 @@ import Strings from "./strings";
  */
 export class Forms {
     // Adds a permission to a site
-    static addPermission(item: IListItem) {
+    static addPermission(item: IListItem, onUpdate: () => void) {
         // Clear the modal
         Modal.clear();
 
@@ -152,7 +152,7 @@ export class Forms {
     }
 
     // Edits a permission to a site
-    static editPermission(item: IListItem) {
+    static editPermission(item: IListItem, onUpdate: () => void) {
         // Clear the modal
         Modal.clear();
 
@@ -293,7 +293,7 @@ export class Forms {
     }
 
     // Removes a permission from a site
-    static removePermission(item: IListItem) {
+    static removePermission(item: IListItem, onUpdate: () => void) {
         // Clear the modal
         Modal.clear();
 
