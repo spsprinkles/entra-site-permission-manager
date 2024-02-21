@@ -339,7 +339,8 @@ export class Forms {
                         onClick: () => {
                             // Ensure the form is valid
                             if (form.isValid()) {
-                                let siteUrl = form.getValues()["values"].value;
+                                let ctrlSiteUrl = form.getControl("siteUrl");
+                                let siteUrl = form.getValues()["siteUrl"].value;
 
                                 // Show a loading dialog
                                 LoadingDialog.setHeader("Calling the Flow");
@@ -381,11 +382,34 @@ export class Forms {
                                         }).then(
                                             // Success
                                             () => {
-                                                // Hide the loading dialog
-                                                LoadingDialog.hide();
-
                                                 // Add the site url to the item
-                                                // TODO
+                                                let siteUrls: string[] = (item.SiteUrls || "").split('\n');
+                                                let siteIdx = siteUrls.indexOf(siteUrl);
+                                                if (siteIdx >= 0) {
+                                                    // Update the loading dialog
+                                                    LoadingDialog.setHeader("Updating List Item");
+                                                    LoadingDialog.setBody("This will close after the site url is added to this item...");
+
+                                                    // Remove the url
+                                                    siteUrls.slice(siteIdx, 1);
+
+                                                    // Update the value
+                                                    item.update({
+                                                        SiteUrls: siteUrls.join('\n')
+                                                    }).execute(() => {
+                                                        // Error getting the site
+                                                        ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
+                                                            isValid: true,
+                                                            validMessage: "Flow was run and the item was updated successfully."
+                                                        });
+
+                                                        // Hide the loading dialog
+                                                        LoadingDialog.hide();
+                                                    });
+                                                } else {
+                                                    // Hide the loading dialog
+                                                    LoadingDialog.hide();
+                                                }
                                             }
 
                                             // Error
