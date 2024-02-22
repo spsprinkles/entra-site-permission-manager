@@ -220,6 +220,9 @@ export class Forms {
                 }
             ]
         });
+
+        // Show the form
+        Modal.show();
     }
 
     // Edits a permission to a site
@@ -459,10 +462,10 @@ export class Forms {
                                                 if (siteIdx >= 0) {
                                                     // Update the loading dialog
                                                     LoadingDialog.setHeader("Updating List Item");
-                                                    LoadingDialog.setBody("This will close after the site url is added to this item...");
+                                                    LoadingDialog.setBody("This will close after the site url is removed from this item...");
 
                                                     // Remove the url
-                                                    siteUrls.slice(siteIdx, 1);
+                                                    siteUrls.splice(siteIdx, 1);
 
                                                     // Update the value
                                                     item.update({
