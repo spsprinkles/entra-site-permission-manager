@@ -146,8 +146,9 @@ export class App {
                                 }
                             ]
 
-                            // See if the user is an owner and there are no site urls
-                            if (DataSource.isOwner(item) && (item.SiteUrls || "").trim().length == 0) {
+                            // See if the user is an admin/owner and there are no site urls
+                            let isOwner = DataSource.isOwner(item);
+                            if ((Security.IsAdmin || isOwner) && (item.SiteUrls || "").trim().length == 0) {
                                 tooltips.push({
                                     content: "Deletes the request.",
                                     btnProps: {
@@ -164,8 +165,8 @@ export class App {
                                 })
                             }
 
-                            // See if the user is a licensed admin
-                            if (Security.IsAdmin && DataSource.HasLicense) {
+                            // See if the user is an admin/owner
+                            if (Security.IsAdmin || isOwner) {
                                 tooltips.push({
                                     content: "Edits the request.",
                                     btnProps: {
@@ -183,7 +184,10 @@ export class App {
                                         }
                                     }
                                 });
+                            }
 
+                            // See if the user is a licensed admin
+                            if (Security.IsAdmin && DataSource.HasLicense) {
                                 tooltips.push({
                                     content: "Grants access to a site collection.",
                                     btnProps: {
