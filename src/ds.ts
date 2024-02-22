@@ -1,5 +1,5 @@
 import { List } from "dattatable";
-import { Components, Graph, List as SPList, Site, Types, v2, Web } from "gd-sprest-bs";
+import { Components, Graph, List as SPList, Site, Types, v2, Web, ContextInfo } from "gd-sprest-bs";
 import { Security } from "./security";
 import Strings from "./strings";
 
@@ -117,12 +117,30 @@ export class DataSource {
         ]);
     }
 
+    // Sees if the user is an owner of an item
+    static isOwner(item: IListItem): boolean {
+        let isOwner = false;
+
+        // Parse the owners
+        for (let i = 0; i < item.OwnersId.results.length; i++) {
+            // See if this is the current user
+            if (item.OwnersId.results[i] == ContextInfo.userId) {
+                // Set the flag
+                isOwner = true;
+                break;
+            }
+        }
+
+        // Return the flag
+        return isOwner;
+    }
+
     // Refreshes the list data
-    static refresh(itemId: number): PromiseLike<any> {
+    static refresh(itemId?: number): PromiseLike<any> {
         // Return a promise
         return new Promise((resolve, reject) => {
             // Refresh the data
-            DataSource.List.refreshItem(itemId).then(resolve, reject);
+            itemId ? DataSource.List.refreshItem(itemId).then(resolve, reject) : DataSource.List.refresh().then(resolve, reject);
         });
     }
 

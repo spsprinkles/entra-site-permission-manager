@@ -1,6 +1,5 @@
 import { Dashboard } from "dattatable";
 import { Components } from "gd-sprest-bs";
-import { filterSquare } from "gd-sprest-bs/build/icons/svgs/filterSquare";
 import * as jQuery from "jquery";
 import { DataSource, IListItem } from "./ds";
 import { Forms } from "./forms";
@@ -20,7 +19,7 @@ export class App {
     }
 
     // Refreshes the dashboard
-    private refresh(itemId: number) {
+    private refresh(itemId?: number) {
         // Refresh the data
         DataSource.refresh(itemId).then(() => {
             // Refresh the table
@@ -142,6 +141,24 @@ export class App {
                                 }
                             ]
 
+                            // See if the user is an owner and there are no site urls
+                            if (DataSource.isOwner(item) && (item.SiteUrls || "").trim().length == 0) {
+                                tooltips.push({
+                                    content: "Deletes the request.",
+                                    btnProps: {
+                                        text: "Delete",
+                                        type: Components.ButtonTypes.OutlineDanger,
+                                        onClick: () => {
+                                            // Show the delete form
+                                            Forms.deleteRequest(item, () => {
+                                                // Refresh the dashboard
+                                                this.refresh();
+                                            });
+                                        }
+                                    }
+                                })
+                            }
+
                             // See if the user is a licensed admin
                             if (Security.IsAdmin && DataSource.HasLicense) {
                                 tooltips.push({
@@ -184,10 +201,7 @@ export class App {
                                         type: Components.ButtonTypes.OutlinePrimary,
                                         onClick: () => {
                                             // Show the add form
-                                            Forms.editPermission(item, () => {
-                                                // Refresh the dashboard
-                                                this.refresh(item.Id);
-                                            });
+                                            Forms.editPermission(item);
                                         }
                                     }
                                 });

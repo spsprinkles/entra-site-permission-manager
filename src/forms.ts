@@ -98,6 +98,9 @@ export class Forms {
                                                             validMessage: "Flow was run and the item was updated successfully."
                                                         });
 
+                                                        // Call the event
+                                                        onUpdate();
+
                                                         // Hide the loading dialog
                                                         LoadingDialog.hide();
                                                     });
@@ -151,8 +154,76 @@ export class Forms {
         Modal.show();
     }
 
+    // Deletes the request
+    static deleteRequest(item: IListItem, onUpdate: () => void) {
+        // Clear the modal
+        Modal.clear();
+
+        // Set the header
+        Modal.setHeader("Delete Request");
+
+        // Set the body
+        Modal.setBody("Are you sure you want to delete this request?");
+
+        // Set the footer
+        Components.TooltipGroup({
+            el: Modal.FooterElement,
+            isSmall: true,
+            tooltips: [
+                {
+                    content: "Deletes the request.",
+                    btnProps: {
+                        text: "Delete",
+                        type: Components.ButtonTypes.OutlinePrimary,
+                        onClick: () => {
+                            // Show a loading dialog
+                            LoadingDialog.setHeader("Deleting the Request");
+                            LoadingDialog.setBody("This will close after the request is deleted...");
+                            LoadingDialog.show();
+
+                            // Delete the item
+                            item.delete().execute(
+                                // Success
+                                () => {
+                                    // Call the update event
+                                    onUpdate();
+
+                                    // Close the dialog
+                                    Modal.hide();
+
+                                    // Hide the dialog
+                                    LoadingDialog.hide();
+                                },
+
+                                // Error
+                                () => {
+                                    // Set the body
+                                    Modal.setBody("Error deleting the request. Refresh the page and try again...");
+
+                                    // Hide the dialog
+                                    LoadingDialog.hide();
+                                }
+                            )
+                        }
+                    }
+                },
+                {
+                    content: "Closes the dialog.",
+                    btnProps: {
+                        text: "Close",
+                        type: Components.ButtonTypes.OutlineSecondary,
+                        onClick: () => {
+                            // Hides the modal
+                            Modal.hide();
+                        }
+                    }
+                }
+            ]
+        });
+    }
+
     // Edits a permission to a site
-    static editPermission(item: IListItem, onUpdate: () => void) {
+    static editPermission(item: IListItem) {
         // Clear the modal
         Modal.clear();
 
@@ -402,6 +473,9 @@ export class Forms {
                                                             isValid: true,
                                                             validMessage: "Flow was run and the item was updated successfully."
                                                         });
+
+                                                        // Call the event
+                                                        onUpdate();
 
                                                         // Hide the loading dialog
                                                         LoadingDialog.hide();
