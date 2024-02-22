@@ -205,6 +205,7 @@ export class DataSource {
                         ID: flowProps.id,
                         fileName: "",
                         itemUrl: "",
+                        OwnerEmails: flowProps.ownerEmails.join(', '),
                         Permission: flowProps.permission,
                         PermissionId: flowProps.permissionId,
                         RequestType: flowProps.type,

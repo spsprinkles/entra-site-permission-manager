@@ -283,6 +283,7 @@ export class Forms {
                         onClick: () => {
                             // Ensure the form is valid
                             if (form.isValid()) {
+                                let ctrlSiteUrl = form.getControl("siteUrl");
                                 let values = form.getValues();
 
                                 // Show a loading dialog
@@ -327,14 +328,26 @@ export class Forms {
                                         }).then(
                                             // Success
                                             () => {
+                                                // Successfully triggered the flow
+                                                ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
+                                                    isValid: true,
+                                                    validMessage: "Flow was run and the item was updated successfully."
+                                                });
+
                                                 // Hide the loading dialog
                                                 LoadingDialog.hide();
                                             },
 
                                             // Error
-                                            err => {
-                                                // Show the error
-                                                // TODO
+                                            errMessage => {
+                                                // Set the error
+                                                ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
+                                                    isValid: false,
+                                                    invalidMessage: errMessage
+                                                });
+
+                                                // Hide the loading dialog
+                                                LoadingDialog.hide();
                                             }
                                         )
                                     } else {
@@ -459,6 +472,12 @@ export class Forms {
                                         }).then(
                                             // Success
                                             () => {
+                                                // Successfully triggered the flow
+                                                ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
+                                                    isValid: true,
+                                                    validMessage: "Flow was run and the item was updated successfully."
+                                                });
+
                                                 // Add the site url to the item
                                                 let siteUrls: string[] = (item.SiteUrls || "").split('\n');
                                                 let siteIdx = siteUrls.indexOf(siteUrl);
@@ -474,12 +493,6 @@ export class Forms {
                                                     item.update({
                                                         SiteUrls: siteUrls.join('\n')
                                                     }).execute(() => {
-                                                        // Error getting the site
-                                                        ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
-                                                            isValid: true,
-                                                            validMessage: "Flow was run and the item was updated successfully."
-                                                        });
-
                                                         // Call the event
                                                         onUpdate();
 
@@ -490,20 +503,29 @@ export class Forms {
                                                     // Hide the loading dialog
                                                     LoadingDialog.hide();
                                                 }
-                                            }
+                                            },
 
                                             // Error
+                                            errMessage => {
+                                                // Set the error
+                                                ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
+                                                    isValid: false,
+                                                    invalidMessage: errMessage
+                                                });
+
+                                                // Hide the loading dialog
+                                                LoadingDialog.hide();
+                                            }
                                         );
                                     } else {
-                                        // Hide the loading dialog
-                                        LoadingDialog.hide();
-
                                         // Set the error
-                                        let ctrl = form.getControl("siteUrl");
-                                        ctrl.updateValidation(ctrl.el, {
+                                        ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
                                             isValid: false,
                                             invalidMessage: "Error getting the permission for this client id."
                                         });
+
+                                        // Hide the loading dialog
+                                        LoadingDialog.hide();
                                     }
                                 });
                             }
