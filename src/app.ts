@@ -205,7 +205,7 @@ export class App {
                                         text: "Edit Permission",
                                         type: Components.ButtonTypes.OutlinePrimary,
                                         onClick: () => {
-                                            // Show the add form
+                                            // Show the edit form
                                             Forms.editPermission(item);
                                         }
                                     }
@@ -217,11 +217,23 @@ export class App {
                                         text: "Remove Permission",
                                         type: Components.ButtonTypes.OutlinePrimary,
                                         onClick: () => {
-                                            // Show the add form
+                                            // Show the remove form
                                             Forms.removePermission(item, () => {
                                                 // Refresh the dashboard
                                                 this.refresh(item.Id);
                                             });
+                                        }
+                                    }
+                                });
+
+                                tooltips.push({
+                                    content: "Views access to a site collection.",
+                                    btnProps: {
+                                        text: "View Permission",
+                                        type: Components.ButtonTypes.OutlinePrimary,
+                                        onClick: () => {
+                                            // Show the view form
+                                            Forms.viewPermissions(item);
                                         }
                                     }
                                 });

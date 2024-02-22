@@ -32,13 +32,27 @@ export interface IListItem extends Types.SP.ListItem {
  */
 export class DataSource {
     // Gets the site permission for a client id
-    static getSitePermissions(siteUrl: string): PromiseLike<Types.Microsoft.Graph.permissionCollection> {
+    static getSitePermission(siteId: string, permissionId: string): PromiseLike<Types.Microsoft.Graph.permission> {
+        // Return a promise
+        return new Promise((resolve) => {
+            // Get the permissions for this site
+            v2.sites(siteId).permissions(permissionId).execute(resolve);
+        });
+    }
+
+    // Gets the site permission for a client id
+    static getSitePermissions(siteUrl: string): PromiseLike<{
+        siteId: string;
+        permissions: Types.Microsoft.Graph.permissionCollection
+    }> {
         // Return a promise
         return new Promise((resolve) => {
             // Get the site id
             Site(siteUrl).query({ Select: ["Id"] }).execute(site => {
                 // Get the permissions for this site
-                v2.sites(site.Id).permissions().execute(resolve);
+                v2.sites(site.Id).permissions().execute(permissions => {
+                    resolve({ siteId: site.Id, permissions });
+                });
             });
         });
     }
