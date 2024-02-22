@@ -72,6 +72,7 @@ export class Forms {
                                             appId: item.AppId,
                                             appName: item.Title,
                                             id: item.Id,
+                                            ownerEmails: DataSource.getOwnerEmails(item),
                                             permission: values["permission"].value,
                                             type: "add",
                                             url: site.ServerRelativeUrl
@@ -318,6 +319,7 @@ export class Forms {
                                             appId: item.AppId,
                                             appName: item.Title,
                                             id: item.Id,
+                                            ownerEmails: DataSource.getOwnerEmails(item),
                                             permission: values["permission"].value,
                                             permissionId,
                                             type: "update",
@@ -450,6 +452,7 @@ export class Forms {
                                             appId: item.AppId,
                                             appName: item.Title,
                                             id: item.Id,
+                                            ownerEmails: DataSource.getOwnerEmails(item),
                                             permissionId,
                                             type: "remove",
                                             url: siteUrl

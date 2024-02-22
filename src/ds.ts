@@ -10,6 +10,7 @@ export interface IFlowProps {
     appId: string;
     appName: string;
     id: number;
+    ownerEmails: string[];
     permission?: string;
     permissionId?: string;
     type: "add" | "remove" | "update";
@@ -31,6 +32,19 @@ export interface IListItem extends Types.SP.ListItem {
  * Data Source
  */
 export class DataSource {
+    // Gets the owner emails for an item
+    static getOwnerEmails(item: IListItem): string[] {
+        // Parse the owners
+        let owners = [];
+        for (let i = 0; i < item.Owners.results.length; i++) {
+            // Add the email
+            owners.push(item.Owners.results[i].EMail);
+        }
+
+        // Return the owners
+        return owners;
+    }
+
     // Gets the site permission for a client id
     static getSitePermission(siteId: string, permissionId: string): PromiseLike<Types.Microsoft.Graph.permission> {
         // Return a promise
