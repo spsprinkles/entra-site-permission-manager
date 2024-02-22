@@ -115,10 +115,15 @@ export class App {
                         name: "",
                         title: "Owners",
                         onRenderCell: (el, column, item: IListItem) => {
+                            // Parse the users
+                            let names = [];
                             let users = item.Owners?.results || [];
+                            for (let i = 0; i < users.length; i++) {
+                                names.push(users[i].Title);
+                            }
 
-                            // Render the user information
-                            el.innerHTML = users.join(', ');
+                            // Render the user names
+                            el.innerHTML = names.join(', ');
                         }
                     },
                     {
