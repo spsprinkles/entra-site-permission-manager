@@ -69,7 +69,7 @@ export class Forms {
 
                                         // Run the flow
                                         DataSource.runFlow({
-                                            appId: item.ClientId,
+                                            appId: item.AppId,
                                             appName: item.Title,
                                             id: item.Id,
                                             permission: values["permission"].value,
@@ -300,7 +300,7 @@ export class Forms {
                                         // Parse the identities
                                         let identities = permission.grantedToIdentities || [];
                                         for (let j = 0; j < identities.length; j++) {
-                                            if (identities[j].application.id == item.ClientId) {
+                                            if (identities[j].application.id == item.AppId) {
                                                 // Set the permission id
                                                 permissionId = permission.id;
                                                 break;
@@ -315,7 +315,7 @@ export class Forms {
                                     if (permissionId) {
                                         // Run the flow
                                         DataSource.runFlow({
-                                            appId: item.ClientId,
+                                            appId: item.AppId,
                                             appName: item.Title,
                                             id: item.Id,
                                             permission: values["permission"].value,
@@ -432,7 +432,7 @@ export class Forms {
                                         // Parse the identities
                                         let identities = permission.grantedToIdentities || [];
                                         for (let j = 0; j < identities.length; j++) {
-                                            if (identities[j].application.id == item.ClientId) {
+                                            if (identities[j].application.id == item.AppId) {
                                                 // Set the permission id
                                                 permissionId = permission.id;
                                                 break;
@@ -447,7 +447,7 @@ export class Forms {
                                     if (permissionId) {
                                         // Run the flow
                                         DataSource.runFlow({
-                                            appId: item.ClientId,
+                                            appId: item.AppId,
                                             appName: item.Title,
                                             id: item.Id,
                                             permissionId,
@@ -577,7 +577,7 @@ export class Forms {
                                 DataSource.getSitePermissions(siteUrl).then(sitePermissions => {
                                     let permissionInfo: {
                                         appName: string;
-                                        clientId: string;
+                                        AppId: string;
                                         permissionId: string;
                                         siteId: string;
                                     }[] = [];
@@ -594,7 +594,7 @@ export class Forms {
                                             // Add the permission information
                                             permissionInfo.push({
                                                 appName: identity.application.displayName,
-                                                clientId: identity.application.id,
+                                                AppId: identity.application.id,
                                                 permissionId: permission.id,
                                                 siteId: sitePermissions.siteId
                                             });
@@ -611,7 +611,7 @@ export class Forms {
                                                 title: "App Name"
                                             },
                                             {
-                                                name: "clientId",
+                                                name: "AppId",
                                                 title: "Client Id"
                                             },
                                             {
@@ -619,7 +619,7 @@ export class Forms {
                                                 title: "Permission",
                                                 onRenderCell: (el, col, item: {
                                                     appName: string;
-                                                    clientId: string;
+                                                    AppId: string;
                                                     permissionId: string;
                                                     siteId: string;
                                                 }) => {

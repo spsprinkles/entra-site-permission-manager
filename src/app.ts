@@ -101,9 +101,9 @@ export class App {
                         onRenderCell: (el, column, item: IListItem) => {
                             // Render the application information
                             el.innerHTML = `
-                                <b class="me-2">Name:</b>${item.Title}
+                                <b class="me-2">App Name:</b><br/>${item.Title}
                                 <br/>
-                                <b class="me-2">Client Id:</b>${item.ClientId}
+                                <b class="me-2">App/Client Id:</b><br/>${item.AppId}
                             `;
                         }
                     },

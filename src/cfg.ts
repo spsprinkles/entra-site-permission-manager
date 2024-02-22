@@ -17,7 +17,7 @@ export const Configuration = Helper.SPConfig({
                     Name: "Item",
                     FieldRefs: [
                         "Title",
-                        "ClientId",
+                        "AppId",
                         "SiteUrls",
                         "Owners"
                     ]
@@ -25,9 +25,9 @@ export const Configuration = Helper.SPConfig({
             ],
             CustomFields: [
                 {
-                    name: "ClientId",
-                    title: "Client ID",
-                    description: "The client id of the application.",
+                    name: "AppId",
+                    title: "App ID",
+                    description: "The app/client id of the application.",
                     type: Helper.SPCfgFieldType.Text,
                     required: true,
                 },
@@ -54,7 +54,7 @@ export const Configuration = Helper.SPConfig({
                 {
                     ViewName: "All Items",
                     ViewFields: [
-                        "LinkTitle", "ClientId", "Owners", "SiteUrls"
+                        "LinkTitle", "AppId", "Owners", "SiteUrls"
                     ]
                 }
             ]

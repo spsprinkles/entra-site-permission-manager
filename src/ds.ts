@@ -21,7 +21,7 @@ export interface IFlowProps {
  * Add your custom fields here
  */
 export interface IListItem extends Types.SP.ListItem {
-    ClientId: string;
+    AppId: string;
     Owners: { results: { Id: number; EMail: string; Title: string }[] };
     OwnersId: { results: [] };
     SiteUrls: string;
@@ -104,7 +104,7 @@ export class DataSource {
                     GetAllItems: true,
                     OrderBy: ["Title"],
                     Select: [
-                        "Id", "Title", "ClientId", "SiteUrls",
+                        "Id", "Title", "AppId", "SiteUrls",
                         "OwnersId", "Owners/Title", "Owners/Id", "Owners/EMail"
                     ],
                     Top: 5000
