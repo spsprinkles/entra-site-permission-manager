@@ -130,7 +130,7 @@ export class App {
                         name: "",
                         title: "Actions",
                         onRenderCell: (el, column, item: IListItem) => {
-                            let tooltips = [
+                            let tooltips: Components.ITooltipProps[] = [
                                 {
                                     content: "Views the request.",
                                     btnProps: {
