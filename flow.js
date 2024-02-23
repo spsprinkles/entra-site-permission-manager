@@ -32,7 +32,9 @@ srcDir.forEach((dirName) => {
     const oStream = fs.createWriteStream(dstFile);
     archive.pipe(oStream);
 
+    // Get the files in the directory
+    archive.directory("flows\\" + dirName, false);
+
     // Archive the directory
-    archive.directory(dirName + "/", false);
     archive.finalize();
 });

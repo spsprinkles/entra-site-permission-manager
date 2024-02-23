@@ -4,8 +4,9 @@
   "description": "Dashboard to help apply/remove graph api permissions from site collections.",
   "main": "src/index.ts",
   "scripts": {
-    "all": "npm run build && npm run prod",
+    "all": "npm run build && npm run prod && npm run flow",
     "build": "webpack --mode=development",
+    "flow": "node ./flow.js",
     "prod": "webpack --mode=production"
   },
   "keywords": [],
