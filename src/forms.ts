@@ -71,11 +71,11 @@ export class Forms {
                                         DataSource.runFlow({
                                             appId: item.AppId,
                                             appName: item.Title,
-                                            id: item.Id,
-                                            ownerEmails: DataSource.getOwnerEmails(item),
+                                            itemId: item.Id,
+                                            ownerEmails: DataSource.getOwnerEmails(item).join(', '),
                                             permission: values["permission"].value,
-                                            type: "add",
-                                            url: site.ServerRelativeUrl
+                                            requestType: "add",
+                                            siteUrl: site.ServerRelativeUrl
                                         }).then(
                                             // Success
                                             () => {
@@ -319,12 +319,12 @@ export class Forms {
                                         DataSource.runFlow({
                                             appId: item.AppId,
                                             appName: item.Title,
-                                            id: item.Id,
-                                            ownerEmails: DataSource.getOwnerEmails(item),
+                                            itemId: item.Id,
+                                            ownerEmails: DataSource.getOwnerEmails(item).join(', '),
                                             permission: values["permission"].value,
                                             permissionId,
-                                            type: "update",
-                                            url: Strings.SourceUrl
+                                            requestType: "update",
+                                            siteUrl: Strings.SourceUrl
                                         }).then(
                                             // Success
                                             () => {
@@ -464,11 +464,11 @@ export class Forms {
                                         DataSource.runFlow({
                                             appId: item.AppId,
                                             appName: item.Title,
-                                            id: item.Id,
-                                            ownerEmails: DataSource.getOwnerEmails(item),
+                                            itemId: item.Id,
+                                            ownerEmails: DataSource.getOwnerEmails(item).join(', '),
                                             permissionId,
-                                            type: "remove",
-                                            url: siteUrl
+                                            requestType: "remove",
+                                            siteUrl: siteUrl
                                         }).then(
                                             // Success
                                             () => {

@@ -9,12 +9,13 @@ import Strings from "./strings";
 export interface IFlowProps {
     appId: string;
     appName: string;
-    id: number;
-    ownerEmails: string[];
+    itemId: number;
+    ownerEmails: string;
     permission?: string;
     permissionId?: string;
-    type: "add" | "remove" | "update";
-    url: string;
+    requestType: "add" | "remove" | "update";
+    siteId?: string;
+    siteUrl: string;
 }
 
 /**
@@ -179,39 +180,14 @@ export class DataSource {
         return new Promise((resolve, reject) => {
             // Get the site id
             Site(Strings.SourceUrl).query({ Select: ["Id"] }).execute(site => {
-                let flowId = "";
-                switch (flowProps.type) {
-                    case "add":
-                        flowId = Strings.FlowId;
-                        break;
-                    case "remove":
-                        flowId = Strings.FlowId;
-                        break;
-                    case "update":
-                        flowId = Strings.FlowId;
-                        break;
-                }
-
                 // Run the flow
                 SPList.runFlow({
-                    id: flowId,
+                    id: Strings.FlowId,
                     list: Strings.Lists.Main,
                     cloudEnv: Strings.CloudEnv,
                     token: this._token,
                     webUrl: Strings.SourceUrl,
-                    data: {
-                        AppId: flowProps.appId,
-                        AppName: flowProps.appName,
-                        ID: flowProps.id,
-                        fileName: "",
-                        itemUrl: "",
-                        OwnerEmails: flowProps.ownerEmails.join(', '),
-                        Permission: flowProps.permission,
-                        PermissionId: flowProps.permissionId,
-                        RequestType: flowProps.type,
-                        SiteId: site.Id,
-                        SiteUrl: flowProps.url,
-                    }
+                    data: flowProps
                 }).then(results => {
                     // Save the token
                     this._token = results.flowToken;

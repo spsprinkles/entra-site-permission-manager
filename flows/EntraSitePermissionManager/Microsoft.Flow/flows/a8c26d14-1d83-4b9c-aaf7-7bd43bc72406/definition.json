@@ -1,0 +1,423 @@
+{
+    "name": "be1edf84-e914-4896-a236-50080778e2bd",
+    "id": "/providers/Microsoft.Flow/flows/be1edf84-e914-4896-a236-50080778e2bd",
+    "type": "Microsoft.Flow/flows",
+    "properties": {
+        "apiId": "/providers/Microsoft.PowerApps/apis/shared_logicflows",
+        "displayName": "Entra Site Permission Manager",
+        "definition": {
+            "metadata": {
+                "workflowEntityId": null,
+                "processAdvisorMetadata": null,
+                "flowChargedByPaygo": null,
+                "flowclientsuspensionreason": "None",
+                "flowclientsuspensiontime": null,
+                "flowclientsuspensionreasondetails": null,
+                "creator": {
+                    "id": "4af50d87-e728-484e-874c-3f4536b38fee",
+                    "type": "User",
+                    "tenantId": "aecb54e0-7430-409d-86a4-7639c743eee7"
+                },
+                "provisioningMethod": "FromDefinition",
+                "failureAlertSubscription": true,
+                "clientLastModifiedTime": "2024-02-22T18:34:23.5070515Z",
+                "connectionKeySavedTimeKey": "2024-02-22T18:34:23.5070515Z"
+            },
+            "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+            "contentVersion": "1.0.0.0",
+            "parameters": {
+                "$connections": {
+                    "defaultValue": {},
+                    "type": "Object"
+                },
+                "$authentication": {
+                    "defaultValue": {},
+                    "type": "SecureObject"
+                }
+            },
+            "triggers": {
+                "manual": {
+                    "splitOn": "@triggerBody()['rows']",
+                    "metadata": {
+                        "operationMetadataId": "3bb39d98-4d1e-4869-a6ad-7589af2065bd"
+                    },
+                    "type": "Request",
+                    "kind": "ApiConnection",
+                    "inputs": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "rows": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "entity": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "itemId": {
+                                                        "title": "itemId",
+                                                        "type": "integer",
+                                                        "format": "int64"
+                                                    },
+                                                    "appId": {
+                                                        "title": "appId",
+                                                        "type": "string"
+                                                    },
+                                                    "appName": {
+                                                        "title": "appName",
+                                                        "type": "string"
+                                                    },
+                                                    "ownerEmails": {
+                                                        "title": "ownerEmails",
+                                                        "type": "string"
+                                                    },
+                                                    "permission": {
+                                                        "title": "permission",
+                                                        "type": "string"
+                                                    },
+                                                    "permissionId": {
+                                                        "title": "permissionId",
+                                                        "type": "string"
+                                                    },
+                                                    "requestType": {
+                                                        "title": "requestType",
+                                                        "type": "string"
+                                                    },
+                                                    "siteId": {
+                                                        "title": "siteId",
+                                                        "type": "string"
+                                                    },
+                                                    "siteUrl": {
+                                                        "title": "siteUrl",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "itemId",
+                                                    "appId",
+                                                    "appName",
+                                                    "ownerEmails",
+                                                    "requestType",
+                                                    "siteId",
+                                                    "siteUrl"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "entity"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "rows"
+                            ]
+                        },
+                        "host": {
+                            "connection": {
+                                "name": "@parameters('$connections')['shared_sharepointonline']['connectionId']"
+                            },
+                            "api": {
+                                "runtimeUrl": "https://flow-apim-unitedstates-002-eastus-01.azure-apim.net/apim/sharepointonline"
+                            }
+                        },
+                        "operationId": "GetItemHybridTriggerSchema",
+                        "parameters": {
+                            "dataset": "https://dattaspo.sharepoint.com/sites/Demo/entra-site-mgr",
+                            "table": "3e323a53-8bea-4448-b84e-b09fa2005dbe"
+                        },
+                        "headersSchema": {
+                            "x-ms-user-name-encoded": {
+                                "title": "User name",
+                                "type": "string",
+                                "format": "byte",
+                                "x-ms-dynamically-added": false
+                            },
+                            "x-ms-user-email-encoded": {
+                                "title": "User email",
+                                "type": "string",
+                                "format": "byte",
+                                "x-ms-dynamically-added": false
+                            },
+                            "x-ms-user-timestamp": {
+                                "title": "Timestamp",
+                                "type": "string",
+                                "x-ms-dynamically-added": false
+                            }
+                        }
+                    }
+                }
+            },
+            "actions": {
+                "Set_tenant_id": {
+                    "runAfter": {
+                        "Set_the_flow_input_properties": [
+                            "Succeeded"
+                        ]
+                    },
+                    "metadata": {
+                        "operationMetadataId": "bd88cc02-2df2-4294-a6a4-60172050b98f"
+                    },
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "tenantId",
+                                "type": "string",
+                                "value": ""
+                            }
+                        ]
+                    }
+                },
+                "Set_client_id": {
+                    "runAfter": {
+                        "Set_tenant_id": [
+                            "Succeeded"
+                        ]
+                    },
+                    "metadata": {
+                        "operationMetadataId": "bd88cc02-2df2-4294-a6a4-95f38250b98f"
+                    },
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "clientId",
+                                "type": "string",
+                                "value": ""
+                            }
+                        ]
+                    }
+                },
+                "Set_client_secret": {
+                    "runAfter": {
+                        "Set_client_id": [
+                            "Succeeded"
+                        ]
+                    },
+                    "metadata": {
+                        "operationMetadataId": "9a27a32e-8a12-439e-8d0c-cb4053606a4f"
+                    },
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "clientSecret",
+                                "type": "string",
+                                "value": ""
+                            }
+                        ]
+                    }
+                },
+                "Get_graph_token": {
+                    "runAfter": {
+                        "Set_client_secret": [
+                            "Succeeded"
+                        ]
+                    },
+                    "metadata": {
+                        "operationMetadataId": "045ebac5-63f6-41f8-944e-6190ec81839f"
+                    },
+                    "type": "Http",
+                    "inputs": {
+                        "method": "POST",
+                        "uri": "https://login.microsoftonline.com/@{variables('tenantId')}/oauth2/v2.0/token",
+                        "headers": {
+                            "content-type": "application/x-www-form-urlencoded"
+                        },
+                        "body": "client_id=@{variables('clientId')}&client_secret=@{variables('clientSecret')}&grant_type=client_credentials&scope=https://graph.microsoft.com/.default"
+                    }
+                },
+                "Set_access_token": {
+                    "runAfter": {
+                        "Get_graph_token": [
+                            "Succeeded"
+                        ]
+                    },
+                    "metadata": {
+                        "operationMetadataId": "b27a4fd2-a22d-47a1-a73b-5f87260c5e5b"
+                    },
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "accessToken",
+                                "type": "string",
+                                "value": "Bearer @{body('Get_graph_token').access_token}"
+                            }
+                        ]
+                    }
+                },
+                "Set_the_flow_input_properties": {
+                    "runAfter": {},
+                    "metadata": {
+                        "operationMetadataId": "6350d8af-f8c2-4f81-9ce0-f92a8647a531"
+                    },
+                    "type": "InitializeVariable",
+                    "inputs": {
+                        "variables": [
+                            {
+                                "name": "flowProps",
+                                "type": "object",
+                                "value": "@triggerBody().entity"
+                            }
+                        ]
+                    }
+                },
+                "Switch": {
+                    "runAfter": {
+                        "Set_access_token": [
+                            "Succeeded"
+                        ]
+                    },
+                    "cases": {
+                        "Case": {
+                            "case": "add",
+                            "actions": {
+                                "Add_Permission": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                        "operationMetadataId": "fe614676-e904-4e9b-9578-df51ffabd377"
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "method": "POST",
+                                        "uri": "https://graph.microsoft.com/v1.0/sites/@{variables('flowProps').siteId}/permissions",
+                                        "headers": {
+                                            "Authorization": "@variables('accessToken')"
+                                        },
+                                        "body": {
+                                            "roles": [
+                                                "@{variables('flowProps').Permission}"
+                                            ],
+                                            "grantedToIdentities": [
+                                                {
+                                                    "application": {
+                                                        "id": "@{variables('flowProps').appId}",
+                                                        "displayName": "@{variables('flowProps').appName}"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "Case_2": {
+                            "case": "remove",
+                            "actions": {
+                                "Remove_Permission": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                        "operationMetadataId": "e73fceed-21e8-4229-872e-49a2b2b0bc89"
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "method": "DELETE",
+                                        "uri": "https://graph.microsoft.com/v1.0/sites/@{variables('flowProps').siteId}/permissions/@{variables('flowProps').permissionId}",
+                                        "headers": {
+                                            "Authorization": "@variables('accessToken')"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "Case_3": {
+                            "case": "update",
+                            "actions": {
+                                "Update_Permission": {
+                                    "runAfter": {},
+                                    "metadata": {
+                                        "operationMetadataId": "a50109bc-b7ec-4664-b8b5-6ee077e655b7"
+                                    },
+                                    "type": "Http",
+                                    "inputs": {
+                                        "method": "PATCH",
+                                        "uri": "https://graph.microsoft.com/v1.0/sites/@{variables('flowProps').SiteId}/permissions/@{variables('flowProps').PermissionId}",
+                                        "headers": {
+                                            "Authorization": "@variables('accessToken')"
+                                        },
+                                        "body": {
+                                            "roles": [
+                                                "@{variables('flowProps').permission}"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "actions": {
+                            "Terminate": {
+                                "runAfter": {},
+                                "metadata": {
+                                    "operationMetadataId": "2a9686d9-d859-4763-908e-cdd2a1e11d63"
+                                },
+                                "type": "Terminate",
+                                "inputs": {
+                                    "runStatus": "Failed",
+                                    "runError": {
+                                        "code": "Invalid Request Type",
+                                        "message": "The request type value is invalid."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "expression": "@variables('flowProps').requestType",
+                    "metadata": {
+                        "operationMetadataId": "44666a39-ff3a-4f4c-8f41-05f5264a2038"
+                    },
+                    "type": "Switch"
+                },
+                "Send_an_email_(V2)": {
+                    "runAfter": {
+                        "Switch": [
+                            "Succeeded"
+                        ]
+                    },
+                    "metadata": {
+                        "operationMetadataId": "c1611408-4fd6-483c-84a6-3eebd1cc2039"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                        "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                            "connectionName": "shared_office365",
+                            "operationId": "SendEmailV2"
+                        },
+                        "parameters": {
+                            "emailMessage/To": "@variables('flowProps').ownerEmails",
+                            "emailMessage/Subject": "Site Permission Request",
+                            "emailMessage/Body": "<p>App Owner(s),<br>\n<br>\nThe following request was processed successfully:<br>\n<br>\nRequest: @{variables('flowProps').requestType}<br>\nApp Name: @{variables('flowProps').appName}<br>\nSite: @{variables('flowProps').siteUrl}<br>\nPermission: @{variables('flowProps').permission}<br>\n<br>\nr/,<br>\nSite Permission Managers</p>",
+                            "emailMessage/Importance": "Normal"
+                        },
+                        "authentication": {
+                            "value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']",
+                            "type": "Raw"
+                        }
+                    }
+                }
+            },
+            "description": "Adds/Removes/Updates permissions for applications interacting w/ SharePoint."
+        },
+        "connectionReferences": {
+            "shared_sharepointonline": {
+                "connectionName": "shared-sharepointonl-66a6d844-5e1b-4fa5-a8f1-40d37f28a005",
+                "source": "Invoker",
+                "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                "tier": "NotSpecified"
+            },
+            "shared_office365": {
+                "connectionName": "shared-office365-0f5dbe87-55c2-42fe-acb8-a951635aebe6",
+                "source": "Invoker",
+                "id": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                "tier": "NotSpecified"
+            }
+        },
+        "flowFailureAlertSubscribed": false,
+        "isManaged": false
+    }
+}
