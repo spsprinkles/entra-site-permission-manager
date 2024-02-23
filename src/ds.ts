@@ -180,6 +180,9 @@ export class DataSource {
         return new Promise((resolve, reject) => {
             // Get the site id
             Site(Strings.SourceUrl).query({ Select: ["Id"] }).execute(site => {
+                // Set the site id
+                flowProps.siteId = site.Id;
+
                 // Run the flow
                 SPList.runFlow({
                     id: Strings.FlowId,

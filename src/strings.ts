@@ -16,7 +16,7 @@ export const setContext = (context, sourceUrl?: string) => {
 const Strings = {
     AppElementId: "entra-site-manager",
     CloudEnv: SPTypes.CloudEnvironment.Default,
-    FlowId: "be1edf84-e914-4896-a236-50080778e2bd",
+    FlowId: "21ecf913-0d67-4ba4-9cc2-929155c0533f",
     GlobalVariable: "EntraSiteManager",
     Lists: {
         Main: "Site Manager"
