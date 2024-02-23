@@ -74,6 +74,7 @@ export class Forms {
                                             itemId: item.Id,
                                             ownerEmails: DataSource.getOwnerEmails(item).join(', '),
                                             permission: values["permission"].value,
+                                            permissionId: "",
                                             requestType: "add",
                                             siteUrl: site.ServerRelativeUrl
                                         }).then(
@@ -466,6 +467,7 @@ export class Forms {
                                             appName: item.Title,
                                             itemId: item.Id,
                                             ownerEmails: DataSource.getOwnerEmails(item).join(', '),
+                                            permission: "",
                                             permissionId,
                                             requestType: "remove",
                                             siteUrl: siteUrl

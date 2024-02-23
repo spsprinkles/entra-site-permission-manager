@@ -11,8 +11,8 @@ export interface IFlowProps {
     appName: string;
     itemId: number;
     ownerEmails: string;
-    permission?: string;
-    permissionId?: string;
+    permission: string;
+    permissionId: string;
     requestType: "add" | "remove" | "update";
     siteId?: string;
     siteUrl: string;
