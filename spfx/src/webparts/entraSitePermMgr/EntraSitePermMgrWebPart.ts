@@ -8,20 +8,29 @@ import type { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'EntraSitePermMgrWebPartStrings';
 
 export interface IEntraSitePermMgrWebPartProps {
-  description: string;
+  flowId: string;
 }
 
 // Reference the solution
 import "../../../../dist/entra-site-permission-manager.js";
 declare const EntraSitePermissionManager: {
-  render: (el: HTMLElement, context: WebPartContext) => void;
+  render: (props: {
+    el: HTMLElement,
+    context?: WebPartContext;
+    flowId?: string;
+    url?: string;
+  }) => void;
 };
 
 export default class EntraSitePermMgrWebPart extends BaseClientSideWebPart<IEntraSitePermMgrWebPartProps> {
 
   public render(): void {
     // Render the application
-    EntraSitePermissionManager.render(this.domElement, this.context);
+    EntraSitePermissionManager.render({
+      el: this.domElement,
+      context: this.context,
+      flowId: this.properties.flowId
+    });
   }
 
   //protected onInit(): Promise<void> { }
@@ -50,14 +59,15 @@ export default class EntraSitePermMgrWebPart extends BaseClientSideWebPart<IEntr
       pages: [
         {
           header: {
-            description: strings.PropertyPaneDescription
+            description: strings.PropertyPaneFlowId
           },
           groups: [
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
+                PropertyPaneTextField('flowId', {
+                  label: strings.FlowIdFieldLabel,
+                  description: "The flow id of the Entra Site Permission Manager flow."
                 })
               ]
             }

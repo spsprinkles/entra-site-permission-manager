@@ -1,7 +1,7 @@
 declare interface IEntraSitePermMgrWebPartStrings {
-  PropertyPaneDescription: string;
+  PropertyPaneFlowId: string;
   BasicGroupName: string;
-  DescriptionFieldLabel: string;
+  FlowIdFieldLabel: string;
   AppLocalEnvironmentSharePoint: string;
   AppLocalEnvironmentTeams: string;
   AppLocalEnvironmentOffice: string;

@@ -10,13 +10,18 @@ export const setContext = (context, sourceUrl?: string) => {
     Strings.SourceUrl = sourceUrl || ContextInfo.webServerRelativeUrl;
 }
 
+export const setFlowId = (flowId: string) => {
+    // Set the flow id
+    Strings.FlowId = flowId;
+}
+
 /**
  * Global Constants
  */
 const Strings = {
     AppElementId: "entra-site-permission-manager",
     CloudEnv: SPTypes.CloudEnvironment.Default,
-    FlowId: "80dc88c1-e064-4cb1-b125-78ee248b1381",
+    FlowId: "",
     GlobalVariable: "EntraSitePermissionManager",
     Lists: {
         Main: "Site Manager"

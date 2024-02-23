@@ -5,23 +5,34 @@ import { Configuration } from "./cfg";
 import { DataSource } from "./ds";
 import { InstallationModal } from "./install";
 import { Security } from "./security";
-import Strings, { setContext } from "./strings";
+import Strings, { setContext, setFlowId } from "./strings";
 
 // Styling
 import "./styles.scss";
 
+// Properties
+interface IProps {
+    el: HTMLElement,
+    context?: any;
+    flowId?: string;
+    url?: string;
+}
+
 // Create the global variable for this solution
 const GlobalVariable = {
     Configuration,
-    render: (el, context?, sourceUrl?: string) => {
+    render: (props: IProps) => {
         // See if the page context exists
-        if (context) {
+        if (props.context) {
             // Set the context
-            setContext(context, sourceUrl);
+            setContext(props.context, props.url);
 
             // Update the configuration
-            Configuration.setWebUrl(sourceUrl || ContextInfo.webServerRelativeUrl);
+            Configuration.setWebUrl(props.url || ContextInfo.webServerRelativeUrl);
         }
+
+        // Set the flow id
+        props.flowId ? setFlowId(props.flowId) : null;
 
         // Initialize the application
         DataSource.init().then(
@@ -35,7 +46,7 @@ const GlobalVariable = {
                 // Load the current theme and apply it to the components
                 ThemeManager.load(true).then(() => {
                     // Create the application
-                    new App(el);
+                    new App(props.el);
 
                     // Hide the loading dialog
                     LoadingDialog.hide();
@@ -64,5 +75,8 @@ window[Strings.GlobalVariable] = GlobalVariable;
 let elApp = document.querySelector("#" + Strings.AppElementId) as HTMLElement;
 if (elApp) {
     // Render the application
-    GlobalVariable.render(elApp);
+    GlobalVariable.render({
+        el: elApp,
+        flowId: elApp.getAttribute("data-flowId")
+    });
 }
