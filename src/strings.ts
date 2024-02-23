@@ -14,14 +14,14 @@ export const setContext = (context, sourceUrl?: string) => {
  * Global Constants
  */
 const Strings = {
-    AppElementId: "entra-site-manager",
+    AppElementId: "entra-site-permission-manager",
     CloudEnv: SPTypes.CloudEnvironment.Default,
     FlowId: "80dc88c1-e064-4cb1-b125-78ee248b1381",
-    GlobalVariable: "EntraSiteManager",
+    GlobalVariable: "EntraSitePermissionManager",
     Lists: {
         Main: "Site Manager"
     },
-    ProjectName: "Entra ID Site Manager",
+    ProjectName: "Entra Site Permission Manager",
     ProjectDescription: "Dashboard to manage site permission requests for apps using the graph api.",
     SourceUrl: ContextInfo.webServerRelativeUrl,
     Version: "0.1"
