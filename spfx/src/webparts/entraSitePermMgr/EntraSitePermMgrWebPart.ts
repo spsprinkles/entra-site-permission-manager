@@ -3,11 +3,8 @@ import {
   type IPropertyPaneConfiguration,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart, WebPartContext } from '@microsoft/sp-webpart-base';
 import type { IReadonlyTheme } from '@microsoft/sp-component-base';
-import { escape } from '@microsoft/sp-lodash-subset';
-
-import styles from './EntraSitePermMgrWebPart.module.scss';
 import * as strings from 'EntraSitePermMgrWebPartStrings';
 
 export interface IEntraSitePermMgrWebPartProps {
@@ -16,8 +13,8 @@ export interface IEntraSitePermMgrWebPartProps {
 
 // Reference the solution
 import "../../../../dist/entra-site-permission-manager.js";
-declare var EntraSitePermissionManager: {
-  render: (el: HTMLElement, context) => void;
+declare const EntraSitePermissionManager: {
+  render: (el: HTMLElement, context: WebPartContext) => void;
 };
 
 export default class EntraSitePermMgrWebPart extends BaseClientSideWebPart<IEntraSitePermMgrWebPartProps> {
