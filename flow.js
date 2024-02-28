@@ -63,7 +63,7 @@ function generatePackage(srcDir, dstFile) {
     archive.pipe(oStream);
 
     // Get the files in the directory
-    archive.directory("flows\\" + srcDir, false);
+    archive.directory(".\\flows\\" + srcDir, false);
 
     // Archive the directory
     archive.finalize();
@@ -90,7 +90,7 @@ srcDir.forEach((dirName) => {
 
     // Copy the env directory
     console.log("Creating the environment directories...");
-    copyFlowDirectory("flows\\" + dirName, "DoD", "graph.microsoft.us", "login.microsoftonline.us");
+    copyFlowDirectory(".\\flows\\" + dirName, "DoD", "graph.microsoft.us", "login.microsoftonline.us");
 
     // Generate the packages
     console.log("Generating the packages....");
@@ -99,5 +99,5 @@ srcDir.forEach((dirName) => {
 
     // Delete the env directory
     console.log("Removing the environment directories...");
-    fs.rmSync("flows\\" + dirName + "DoD", { recursive: true, force: true });
+    fs.rmSync(".\\flows\\" + dirName + "DoD", { recursive: true, force: true });
 });
