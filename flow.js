@@ -90,7 +90,7 @@ srcDir.forEach((dirName) => {
 
     // Copy the env directory
     console.log("Creating the environment directories...");
-    copyFlowDirectory(".\\flows\\" + dirName, "DoD", "graph.microsoft.us", "login.microsoftonline.us");
+    copyFlowDirectory(path.join(__dirname, "flows") + dirName, "DoD", "graph.microsoft.us", "login.microsoftonline.us");
 
     // Generate the packages
     console.log("Generating the packages....");
