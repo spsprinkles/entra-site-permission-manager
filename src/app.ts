@@ -108,6 +108,10 @@ export class App {
                         }
                     },
                     {
+                        name: "ExpirationDate",
+                        title: "Expiration Date"
+                    },
+                    {
                         name: "SiteUrls",
                         title: "Site Urls"
                     },

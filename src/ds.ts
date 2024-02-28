@@ -24,6 +24,7 @@ export interface IFlowProps {
  */
 export interface IListItem extends Types.SP.ListItem {
     AppId: string;
+    ExpirationDate: string;
     Owners: { results: { Id: number; EMail: string; Title: string }[] };
     OwnersId: { results: [] };
     SiteUrls: string;
@@ -119,7 +120,7 @@ export class DataSource {
                     GetAllItems: true,
                     OrderBy: ["Title"],
                     Select: [
-                        "Id", "Title", "AppId", "SiteUrls",
+                        "Id", "Title", "AppId", "ExpirationDate", "SiteUrls",
                         "OwnersId", "Owners/Title", "Owners/Id", "Owners/EMail"
                     ],
                     Top: 5000

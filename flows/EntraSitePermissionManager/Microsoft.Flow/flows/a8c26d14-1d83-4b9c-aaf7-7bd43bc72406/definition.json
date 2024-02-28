@@ -289,7 +289,7 @@
                                         },
                                         "body": {
                                             "roles": [
-                                                "@{variables('flowProps').Permission}"
+                                                "@{variables('flowProps').permission}"
                                             ],
                                             "grantedToIdentities": [
                                                 {
@@ -334,7 +334,7 @@
                                     "type": "Http",
                                     "inputs": {
                                         "method": "PATCH",
-                                        "uri": "https://graph.microsoft.com/v1.0/sites/@{variables('flowProps').SiteId}/permissions/@{variables('flowProps').PermissionId}",
+                                        "uri": "https://graph.microsoft.com/v1.0/sites/@{variables('flowProps').siteId}/permissions/@{variables('flowProps').permissionId}",
                                         "headers": {
                                             "Authorization": "@variables('accessToken')"
                                         },

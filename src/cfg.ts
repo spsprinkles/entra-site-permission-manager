@@ -18,6 +18,7 @@ export const Configuration = Helper.SPConfig({
                     FieldRefs: [
                         "Title",
                         "AppId",
+                        "ExpirationDate",
                         "SiteUrls",
                         "Owners"
                     ]
@@ -31,6 +32,14 @@ export const Configuration = Helper.SPConfig({
                     type: Helper.SPCfgFieldType.Text,
                     required: true,
                 },
+                {
+                    name: "ExpirationDate",
+                    title: "Expiration Date",
+                    description: "The expiration date of the app id registration.",
+                    type: Helper.SPCfgFieldType.Date,
+                    required: true,
+                    format: SPTypes.DateFormat.DateOnly
+                } as Helper.IFieldInfoDate,
                 {
                     name: "Owners",
                     title: "Owners",
