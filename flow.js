@@ -35,7 +35,7 @@ function findDefinitionFile(src) {
     var files = fs.readdirSync(src);
     for (var i = 0; i < files.length; i++) {
         var file = files[i];
-        var path = src + "\\" + file;
+        var path = src + "/" + file;
 
         // See if this is a directory
         if (fs.statSync(path).isDirectory()) {
@@ -63,7 +63,7 @@ function generatePackage(srcDir, dstFile) {
     archive.pipe(oStream);
 
     // Get the files in the directory
-    archive.directory(".\\flows\\" + srcDir, false);
+    archive.directory("flows/" + srcDir, false);
 
     // Archive the directory
     archive.finalize();
@@ -90,7 +90,7 @@ srcDir.forEach((dirName) => {
 
     // Copy the env directory
     console.log("Creating the environment directories...");
-    copyFlowDirectory(path.join(__dirname, "flows") + dirName, "DoD", "graph.microsoft.us", "login.microsoftonline.us");
+    copyFlowDirectory("./flows/" + dirName, "DoD", "graph.microsoft.us", "login.microsoftonline.us");
 
     // Generate the packages
     console.log("Generating the packages....");
@@ -99,5 +99,5 @@ srcDir.forEach((dirName) => {
 
     // Delete the env directory
     console.log("Removing the environment directories...");
-    fs.rmSync(".\\flows\\" + dirName + "DoD", { recursive: true, force: true });
+    fs.rmSync("./flows/" + dirName + "DoD", { recursive: true, force: true });
 });
