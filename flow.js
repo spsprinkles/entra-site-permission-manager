@@ -13,20 +13,16 @@ function copyFlowDirectory(srcName, envType, graphUrl, loginUrl) {
     console.log("Updating the definition file for the environment type: " + envType);
     if (defFile) {
         // Read the file
-        fs.readFileSync(defFile, 'utf8', function (err, data) {
-            if (err) {
-                return console.log(err);
-            }
+        var data = fs.readFileSync(path.join(__dirname, defFile), 'utf8');
 
-            // Replace the graph url: graph.microsoft.com
-            var content = data.replace(/graph\.microsoft\.com/g, graphUrl);
+        // Replace the graph url: graph.microsoft.com
+        var content = data.replace(/graph\.microsoft\.com/g, graphUrl);
 
-            // Replace the login url: login.microsoftonline.com
-            content = content.replace(/login\.microsoftonline\.com/g, loginUrl);
+        // Replace the login url: login.microsoftonline.com
+        content = content.replace(/login\.microsoftonline\.com/g, loginUrl);
 
-            fs.writeFileSync(defFile, content, 'utf8', function (err) {
-                if (err) return console.log(err);
-            });
+        fs.writeFileSync(path.join(__dirname, defFile), content, 'utf8', function (err) {
+            if (err) return console.log(err);
         });
     }
 }
@@ -63,10 +59,10 @@ function generatePackage(srcDir, dstFile) {
     archive.pipe(oStream);
 
     // Get the files in the directory
-    archive.directory("flows/" + srcDir, false);
+    archive.directory("./flows/" + srcDir, false);
 
-    // Archive the directory
-    archive.finalize();
+    // Close the file
+    return archive.finalize();
 }
 
 // Read the flows directory
@@ -94,10 +90,14 @@ srcDir.forEach((dirName) => {
 
     // Generate the packages
     console.log("Generating the packages....");
-    generatePackage(dirName, dstFile);
-    generatePackage(dirName + "DoD", dstFileDoD);
+    var promises = [];
+    promises.push(generatePackage(dirName, dstFile));
+    promises.push(generatePackage(dirName + "DoD", dstFileDoD));
 
-    // Delete the env directory
-    console.log("Removing the environment directories...");
-    fs.rmSync("./flows/" + dirName + "DoD", { recursive: true, force: true });
+    // Wait for the packages to be completed
+    Promise.all(promises).then(() => {
+        // Delete the env directory
+        console.log("Removing the environment directories...");
+        fs.rmSync("./flows/" + dirName + "DoD", { recursive: true, force: true });
+    });
 });
