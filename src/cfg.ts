@@ -53,7 +53,6 @@ export const Configuration = Helper.SPConfig({
                     title: "Site Urls",
                     description: "Each url must be on a separate line.",
                     type: Helper.SPCfgFieldType.Note,
-                    required: true,
                     noteType: SPTypes.FieldNoteType.TextOnly,
                     showInEditForm: false,
                     showInNewForm: false
