@@ -1,1 +1,15 @@
 /** Custom Styles Go Here */
+/* Fix icon alignment inside nav item buttons */
+#navbar_content ul.navbar-nav li.nav-item a.btn svg {
+    margin: .1rem .25rem .088rem -.25rem;
+}
+nav.footer #navbar_content {
+    height: 1.5rem;
+}
+/* Set styling for navbar-sub */
+nav.navbar-sub {
+    background-color: color-mix(in srgb, var(--sp-black, #000000), transparent 95%);
+    border: 3px solid var(--sp-neutral-quaternary);
+    border-top: 0;
+    border-radius: 0 0 .25rem .25rem;
+}
