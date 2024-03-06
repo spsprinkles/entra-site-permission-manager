@@ -180,7 +180,7 @@ export class DataSource {
         // Return a promise
         return new Promise((resolve, reject) => {
             // Get the site id
-            Site(Strings.SourceUrl).query({ Select: ["Id"] }).execute(site => {
+            Site(flowProps.siteUrl).query({ Select: ["Id"] }).execute(site => {
                 // Set the site id
                 flowProps.siteId = site.Id;
 
