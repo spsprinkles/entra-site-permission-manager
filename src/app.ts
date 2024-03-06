@@ -152,7 +152,8 @@ export class App {
 
                             // See if the user is an admin/owner and there are no site urls
                             let isOwner = DataSource.isOwner(item);
-                            if ((Security.IsAdmin || isOwner) && (item.SiteUrls || "").trim().length == 0) {
+                            let sitesExist = (item.SiteUrls || "").trim().length == 0;
+                            if ((Security.IsAdmin || isOwner) && sitesExist) {
                                 tooltips.push({
                                     content: "Deletes the request.",
                                     btnProps: {
@@ -192,6 +193,7 @@ export class App {
 
                             // See if the user is a licensed admin
                             if (Security.IsAdmin && DataSource.HasLicense) {
+                                // Adds a permission to a new site collection
                                 tooltips.push({
                                     content: "Grants access to a site collection.",
                                     btnProps: {
@@ -207,44 +209,50 @@ export class App {
                                     }
                                 });
 
-                                tooltips.push({
-                                    content: "Edits access to a site collection.",
-                                    btnProps: {
-                                        text: "Edit Permission",
-                                        type: Components.ButtonTypes.OutlinePrimary,
-                                        onClick: () => {
-                                            // Show the edit form
-                                            Forms.editPermission(item);
+                                // Ensure sites exist
+                                if (sitesExist) {
+                                    // Edits an existing permission to a site collection
+                                    tooltips.push({
+                                        content: "Edits access to a site collection.",
+                                        btnProps: {
+                                            text: "Edit Permission",
+                                            type: Components.ButtonTypes.OutlinePrimary,
+                                            onClick: () => {
+                                                // Show the edit form
+                                                Forms.editPermission(item);
+                                            }
                                         }
-                                    }
-                                });
+                                    });
 
-                                tooltips.push({
-                                    content: "Removes access to a site collection.",
-                                    btnProps: {
-                                        text: "Remove Permission",
-                                        type: Components.ButtonTypes.OutlinePrimary,
-                                        onClick: () => {
-                                            // Show the remove form
-                                            Forms.removePermission(item, () => {
-                                                // Refresh the dashboard
-                                                this.refresh(item.Id);
-                                            });
+                                    // Removes an existing permission from a site collection
+                                    tooltips.push({
+                                        content: "Removes access to a site collection.",
+                                        btnProps: {
+                                            text: "Remove Permission",
+                                            type: Components.ButtonTypes.OutlinePrimary,
+                                            onClick: () => {
+                                                // Show the remove form
+                                                Forms.removePermission(item, () => {
+                                                    // Refresh the dashboard
+                                                    this.refresh(item.Id);
+                                                });
+                                            }
                                         }
-                                    }
-                                });
+                                    });
 
-                                tooltips.push({
-                                    content: "Views access to a site collection.",
-                                    btnProps: {
-                                        text: "View Permission",
-                                        type: Components.ButtonTypes.OutlinePrimary,
-                                        onClick: () => {
-                                            // Show the view form
-                                            Forms.viewPermissions(item);
+                                    // Views the permission of a site collection
+                                    tooltips.push({
+                                        content: "Views access to a site collection.",
+                                        btnProps: {
+                                            text: "View Permission",
+                                            type: Components.ButtonTypes.OutlinePrimary,
+                                            onClick: () => {
+                                                // Show the view form
+                                                Forms.viewPermissions(item);
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             }
 
                             // Render a buttons
