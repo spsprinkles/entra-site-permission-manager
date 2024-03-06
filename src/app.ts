@@ -152,8 +152,8 @@ export class App {
 
                             // See if the user is an admin/owner and there are no site urls
                             let isOwner = DataSource.isOwner(item);
-                            let sitesExist = (item.SiteUrls || "").trim().length == 0;
-                            if ((Security.IsAdmin || isOwner) && sitesExist) {
+                            let sitesExist = (item.SiteUrls || "").trim().length > 0;
+                            if ((Security.IsAdmin || isOwner) && !sitesExist) {
                                 tooltips.push({
                                     content: "Deletes the request.",
                                     btnProps: {
