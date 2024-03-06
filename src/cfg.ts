@@ -28,14 +28,14 @@ export const Configuration = Helper.SPConfig({
                 {
                     name: "AppId",
                     title: "App ID",
-                    description: "The app/client id of the application.",
+                    description: "The app/client id of the application",
                     type: Helper.SPCfgFieldType.Text,
                     required: true,
                 },
                 {
                     name: "ExpirationDate",
                     title: "Expiration Date",
-                    description: "The expiration date of the app id registration.",
+                    description: "The expiration date of the app id registration",
                     type: Helper.SPCfgFieldType.Date,
                     required: true,
                     format: SPTypes.DateFormat.DateOnly
@@ -43,7 +43,7 @@ export const Configuration = Helper.SPConfig({
                 {
                     name: "Owners",
                     title: "Owners",
-                    description: "The owners of this request to receive notifications.",
+                    description: "The owners of this request to receive notifications",
                     type: Helper.SPCfgFieldType.User,
                     multi: true,
                     required: true
@@ -51,7 +51,7 @@ export const Configuration = Helper.SPConfig({
                 {
                     name: "SiteUrls",
                     title: "Site Urls",
-                    description: "Each url must be on a separate line.",
+                    description: "Each url must be on a separate line",
                     type: Helper.SPCfgFieldType.Note,
                     noteType: SPTypes.FieldNoteType.TextOnly,
                     showInEditForm: false,
