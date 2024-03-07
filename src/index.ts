@@ -1,5 +1,5 @@
 import { LoadingDialog, waitForTheme } from "dattatable";
-import { ContextInfo } from "gd-sprest-bs";
+import { ContextInfo, ThemeManager } from "gd-sprest-bs";
 import { App } from "./app";
 import { Configuration } from "./cfg";
 import { DataSource } from "./ds";
@@ -14,25 +14,37 @@ import "./styles.scss";
 interface IProps {
     el: HTMLElement,
     context?: any;
+    displayMode?: number;
+    envType?: number;
     flowId?: string;
-    url?: string;
+    sourceUrl?: string;
+    timeFormat?: string;
+    title?: string;
 }
 
 // Create the global variable for this solution
 const GlobalVariable = {
+    App: null,
     Configuration,
+    description: Strings.ProjectDescription,
     render: (props: IProps) => {
         // See if the page context exists
         if (props.context) {
             // Set the context
-            setContext(props.context, props.url);
+            setContext(props.context, props.envType, props.sourceUrl);
 
             // Update the configuration
-            Configuration.setWebUrl(props.url || ContextInfo.webServerRelativeUrl);
+            Configuration.setWebUrl(props.sourceUrl || ContextInfo.webServerRelativeUrl);
         }
 
         // Set the flow id
         props.flowId ? setFlowId(props.flowId) : null;
+
+        // Update the TimeFormat from SPFx value
+        props.timeFormat ? Strings.TimeFormat = props.timeFormat : null;
+
+        // Update the ProjectName from SPFx title field
+        props.title ? Strings.ProjectName = props.title : null;
 
         // Initialize the application
         DataSource.init().then(
@@ -46,7 +58,7 @@ const GlobalVariable = {
                 // Load the current theme and apply it to the components
                 waitForTheme().then(() => {
                     // Create the application
-                    new App(props.el);
+                    GlobalVariable.App = new App(props.el);
 
                     // Hide the loading dialog
                     LoadingDialog.hide();
@@ -65,6 +77,12 @@ const GlobalVariable = {
                 });
             }
         );
+    },
+    timeFormat: Strings.TimeFormat,
+    title: Strings.ProjectName,
+    updateTheme: (themeInfo) => {
+        // Set the theme
+        ThemeManager.setCurrentTheme(themeInfo);
     }
 };
 
@@ -74,6 +92,10 @@ window[Strings.GlobalVariable] = GlobalVariable;
 // Get the element and render the app if it is found
 let elApp = document.querySelector("#" + Strings.AppElementId) as HTMLElement;
 if (elApp) {
+    // Remove the extra border spacing on the webpart in classic mode
+    let contentBox = document.querySelector("#contentBox table.ms-core-tableNoSpace");
+    contentBox ? contentBox.classList.remove("ms-webpartPage-root") : null;
+
     // Render the application
     GlobalVariable.render({
         el: elApp,

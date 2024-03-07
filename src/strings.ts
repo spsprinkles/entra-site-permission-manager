@@ -2,11 +2,12 @@ import { ContextInfo, SPTypes } from "gd-sprest-bs";
 
 // Sets the context information
 // This is for SPFx or Teams solutions
-export const setContext = (context, sourceUrl?: string) => {
+export const setContext = (context, envType?: number, sourceUrl?: string) => {
     // Set the context
     ContextInfo.setPageContext(context.pageContext);
 
-    // Update the source url
+    // Update the properties
+    Strings.IsClassic = envType == SPTypes.EnvironmentType.ClassicSharePoint;
     Strings.SourceUrl = sourceUrl || ContextInfo.webServerRelativeUrl;
 }
 
@@ -21,14 +22,16 @@ export const setFlowId = (flowId: string) => {
 const Strings = {
     AppElementId: "entra-site-permission-manager",
     CloudEnv: SPTypes.CloudEnvironment.Default,
-    FlowId: "",
+    FlowId: null,
     GlobalVariable: "EntraSitePermissionManager",
+    IsClassic: true,
     Lists: {
         Main: "Site Manager"
     },
     ProjectName: "Entra Site Permission Manager",
-    ProjectDescription: "Dashboard to manage site permission requests for apps using the graph api.",
+    ProjectDescription: "Dashboard to manage site permission requests for apps using the Graph API.",
     SourceUrl: ContextInfo.webServerRelativeUrl,
-    Version: "0.1"
+    TimeFormat: "YYYY-MMM-DD HH:mm:ss",
+    Version: "0.0.1"
 };
 export default Strings;
