@@ -34,7 +34,7 @@ export class Forms {
                     items: [
                         { text: "Read", value: "read" },
                         { text: "Write", value: "write" },
-                        { text: "Owner", value: "owner" }
+                        { text: "Full Control", value: "fullcontrol" }
                     ]
                 } as Components.IFormControlPropsDropdown]
         });
@@ -76,6 +76,7 @@ export class Forms {
                                             permission: values["permission"].value,
                                             permissionId: "",
                                             requestType: "add",
+                                            siteId: site.Id,
                                             siteUrl: site.ServerRelativeUrl
                                         }).then(
                                             // Success
@@ -266,7 +267,7 @@ export class Forms {
                     items: [
                         { text: "Read", value: "read" },
                         { text: "Write", value: "write" },
-                        { text: "Owner", value: "owner" }
+                        { text: "Full Control", value: "fullcontrol" }
                     ]
                 } as Components.IFormControlPropsDropdown]
         });
@@ -293,7 +294,8 @@ export class Forms {
                                 LoadingDialog.show();
 
                                 // Get the permission id for this site
-                                DataSource.getSitePermissions(values["siteUrl"].value).then(sitePermissions => {
+                                let siteUrl = values["siteUrl"].value;
+                                DataSource.getSitePermissions(siteUrl).then(sitePermissions => {
                                     let permissionId = null;
 
                                     // Find the permission
@@ -325,7 +327,7 @@ export class Forms {
                                             permission: values["permission"].value,
                                             permissionId,
                                             requestType: "update",
-                                            siteUrl: Strings.SourceUrl
+                                            siteUrl
                                         }).then(
                                             // Success
                                             () => {
@@ -470,7 +472,7 @@ export class Forms {
                                             permission: "",
                                             permissionId,
                                             requestType: "remove",
-                                            siteUrl: siteUrl
+                                            siteUrl
                                         }).then(
                                             // Success
                                             () => {

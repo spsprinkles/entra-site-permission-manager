@@ -1,5 +1,5 @@
-import { LoadingDialog } from "dattatable";
-import { ContextInfo, ThemeManager } from "gd-sprest-bs";
+import { LoadingDialog, waitForTheme } from "dattatable";
+import { ContextInfo } from "gd-sprest-bs";
 import { App } from "./app";
 import { Configuration } from "./cfg";
 import { DataSource } from "./ds";
@@ -44,7 +44,7 @@ const GlobalVariable = {
                 LoadingDialog.show();
 
                 // Load the current theme and apply it to the components
-                ThemeManager.load(true).then(() => {
+                waitForTheme().then(() => {
                     // Create the application
                     new App(props.el);
 
