@@ -34,7 +34,7 @@ export class Forms {
                     items: [
                         { text: "Read", value: "read" },
                         { text: "Write", value: "write" },
-                        { text: "Owner", value: "owner" }
+                        { text: "Full Control", value: "fullcontrol" }
                     ]
                 } as Components.IFormControlPropsDropdown]
         });
@@ -267,7 +267,7 @@ export class Forms {
                     items: [
                         { text: "Read", value: "read" },
                         { text: "Write", value: "write" },
-                        { text: "Owner", value: "owner" }
+                        { text: "Full Control", value: "fullcontrol" }
                     ]
                 } as Components.IFormControlPropsDropdown]
         });
