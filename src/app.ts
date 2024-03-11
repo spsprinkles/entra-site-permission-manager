@@ -309,7 +309,6 @@ export class App {
                         onRenderCell: (el, column, item: IListItem) => {
                             let isOwner = DataSource.isOwner(item);
                             let sitesExist = (item.SiteUrls || "").trim().length > 0;
-                            let permLinks: Components.IDropdownItem[] = [];
                             let tooltips: Components.ITooltipProps[] = [
                                 {
                                     content: "View Application",
@@ -367,81 +366,99 @@ export class App {
 
                             // See if the user is a licensed admin
                             if (Security.IsAdmin && DataSource.HasLicense) {
-                                // Adds a permission to a new site collection
-                                permLinks.push({
-                                    text: "Add Permission",
-                                    title: "Grant access to a site collection",
-                                    onClick: () => {
-                                        // Show the add form
-                                        Forms.addPermission(item, () => {
-                                            // Refresh the dashboard
-                                            this.refresh(item.Id);
-                                        });
+                                tooltips.push({
+                                    content: "Set Permissions",
+                                    ddlProps: {
+                                        label: "Permissions",
+                                        type: Components.DropdownTypes.OutlinePrimary,
+                                        items: [
+                                            {
+                                                // Adds a permission to a new site collection
+                                                text: "Add Permission",
+                                                onClick: () => {
+                                                    // Show the add form
+                                                    Forms.addPermission(item, () => {
+                                                        // Refresh the dashboard
+                                                        this.refresh(item.Id);
+                                                    });
+                                                },
+                                                onRender: (el) => {
+                                                    Components.Tooltip({
+                                                        content: "Grant access to a site collection",
+                                                        placement: Components.TooltipPlacements.Left,
+                                                        target: el,
+                                                        type: Components.TooltipTypes.Primary
+                                                    });
+                                                }
+                                            }
+                                        ]
                                     }
                                 });
 
                                 // Ensure sites exist
                                 if (sitesExist) {
-                                    // Views the permission of a site collection
-                                    permLinks.push({
-                                        text: "View Permission",
-                                        title: "View access to a site collection",
-                                        onClick: () => {
-                                            // Show the view form
-                                            Forms.viewPermissions(item);
+                                    tooltips[tooltips.length - 1].ddlProps.items.push(
+                                        {
+                                            // Views the permission of a site collection
+                                            text: "View Permission",
+                                            onClick: () => {
+                                                // Show the view form
+                                                Forms.viewPermissions(item);
+                                            },
+                                            onRender: (el) => {
+                                                Components.Tooltip({
+                                                    content: "View access to a site collection",
+                                                    placement: Components.TooltipPlacements.Left,
+                                                    target: el,
+                                                    type: Components.TooltipTypes.Primary
+                                                });
+                                            }
+                                        },
+                                        {
+                                            // Edits an existing permission to a site collection
+                                            text: "Edit Permission",
+                                            onClick: () => {
+                                                // Show the edit form
+                                                Forms.editPermission(item);
+                                            },
+                                            onRender: (el) => {
+                                                Components.Tooltip({
+                                                    content: "Edit access to a site collection",
+                                                    placement: Components.TooltipPlacements.Left,
+                                                    target: el,
+                                                    type: Components.TooltipTypes.Primary
+                                                });
+                                            }
+                                        },
+                                        {
+                                            // Removes an existing permission from a site collection
+                                            text: "Remove Permission",
+                                            onClick: () => {
+                                                // Show the remove form
+                                                Forms.removePermission(item, () => {
+                                                    // Refresh the dashboard
+                                                    this.refresh(item.Id);
+                                                });
+                                            },
+                                            onRender: (el) => {
+                                                Components.Tooltip({
+                                                    content: "Remove access to a site collection",
+                                                    placement: Components.TooltipPlacements.Left,
+                                                    target: el,
+                                                    type: Components.TooltipTypes.Primary
+                                                });
+                                            }
                                         }
-                                    });
-                                    
-                                    // Edits an existing permission to a site collection
-                                    permLinks.push({
-                                        text: "Edit Permission",
-                                        title: "Edit access to a site collection",
-                                        onClick: () => {
-                                            // Show the edit form
-                                            Forms.editPermission(item);
-                                        }
-                                    });
-
-                                    // Removes an existing permission from a site collection
-                                    permLinks.push({
-                                        text: "Remove Permission",
-                                        title: "Remove access to a site collection",
-                                        onClick: () => {
-                                            // Show the remove form
-                                            Forms.removePermission(item, () => {
-                                                // Refresh the dashboard
-                                                this.refresh(item.Id);
-                                            });
-                                        }
-                                    });
+                                    );
                                 }
                             }
 
                             // Render a tooltip group
-                            let ttg = Components.TooltipGroup({
+                            Components.TooltipGroup({
                                 el,
                                 isSmall: true,
                                 tooltips
                             });
-
-                            if (permLinks.length > 0) {
-                                
-                                let ddl = Components.Dropdown({
-                                    el: ttg.el,
-                                    label: "Permissions",
-                                    type: Components.ButtonTypes.OutlinePrimary,
-                                    items: permLinks,
-                                    onMenuRendering: (props) => {
-                                        // This is the popover. You can further customize from here
-
-                                        // You must return the props
-                                        return props;
-                                    },
-                                });
-                                
-                                let btn = ddl.el.querySelector("button");
-                                btn ? ttg.el.appendChild(btn) && ddl.el.remove() : null;
-                            }
                         }
                     }
                 ]
