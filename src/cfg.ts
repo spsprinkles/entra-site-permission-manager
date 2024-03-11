@@ -43,7 +43,7 @@ export const Configuration = Helper.SPConfig({
                 {
                     name: "Owners",
                     title: "Owners",
-                    description: "The owners of this request to receive notifications",
+                    description: "The owners of the application to receive notifications",
                     type: Helper.SPCfgFieldType.User,
                     multi: true,
                     required: true
