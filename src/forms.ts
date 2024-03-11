@@ -644,7 +644,7 @@ export class Forms {
                                             },
                                             {
                                                 name: "AppId",
-                                                title: "App Id"
+                                                title: "App ID"
                                             },
                                             {
                                                 name: "permission",
