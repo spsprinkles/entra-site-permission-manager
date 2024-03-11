@@ -634,6 +634,9 @@ export class Forms {
                                     new DataTable({
                                         el: elPermissions,
                                         rows: permissionInfo,
+                                        dtProps: {
+                                            dom: 'rt<"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
+                                        },
                                         columns: [
                                             {
                                                 name: "appName",
