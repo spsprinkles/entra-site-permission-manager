@@ -24,7 +24,7 @@ export class Forms {
                     label: "Site Url:",
                     type: Components.FormControlTypes.TextField,
                     required: true,
-                    errorMessage: "A site url is required."
+                    errorMessage: "A site url is required"
                 } as Components.IFormControlPropsDropdown,
                 {
                     name: "permission",
@@ -45,7 +45,7 @@ export class Forms {
             isSmall: true,
             tooltips: [
                 {
-                    content: "Adds the permission to the site.",
+                    content: "Add the permission to the site",
                     btnProps: {
                         text: "Add",
                         type: Components.ButtonTypes.OutlinePrimary,
@@ -98,7 +98,7 @@ export class Forms {
                                                         // Error getting the site
                                                         ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
                                                             isValid: true,
-                                                            validMessage: "Flow was run and the item was updated successfully."
+                                                            validMessage: "Flow was run and the item was updated successfully"
                                                         });
 
                                                         // Call the event
@@ -131,7 +131,7 @@ export class Forms {
                                         // Error getting the site
                                         ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
                                             isValid: false,
-                                            invalidMessage: "Error getting the site information."
+                                            invalidMessage: "Error getting the site information"
                                         });
 
                                         // Hide the loading dialog
@@ -143,7 +143,7 @@ export class Forms {
                     }
                 },
                 {
-                    content: "Closes the dialog",
+                    content: "Close the dialog",
                     btnProps: {
                         text: "Close",
                         type: Components.ButtonTypes.OutlineSecondary,
@@ -157,16 +157,16 @@ export class Forms {
         Modal.show();
     }
 
-    // Deletes the request
+    // Deletes the application
     static deleteRequest(item: IListItem, onUpdate: () => void) {
         // Clear the modal
         Modal.clear();
 
         // Set the header
-        Modal.setHeader("Delete Request");
+        Modal.setHeader("Delete Application");
 
         // Set the body
-        Modal.setBody("Are you sure you want to delete this request?");
+        Modal.setBody("Are you sure you want to delete this application?");
 
         // Set the footer
         Components.TooltipGroup({
@@ -174,14 +174,14 @@ export class Forms {
             isSmall: true,
             tooltips: [
                 {
-                    content: "Deletes the request.",
+                    content: "Delete the Application",
                     btnProps: {
                         text: "Delete",
                         type: Components.ButtonTypes.OutlinePrimary,
                         onClick: () => {
                             // Show a loading dialog
-                            LoadingDialog.setHeader("Deleting the Request");
-                            LoadingDialog.setBody("This will close after the request is deleted...");
+                            LoadingDialog.setHeader("Deleting the Application");
+                            LoadingDialog.setBody("This will close after the application is deleted...");
                             LoadingDialog.show();
 
                             // Delete the item
@@ -201,7 +201,7 @@ export class Forms {
                                 // Error
                                 () => {
                                     // Set the body
-                                    Modal.setBody("Error deleting the request. Refresh the page and try again...");
+                                    Modal.setBody("Error deleting the application. Refresh the page and try again...");
 
                                     // Hide the dialog
                                     LoadingDialog.hide();
@@ -211,7 +211,7 @@ export class Forms {
                     }
                 },
                 {
-                    content: "Closes the dialog.",
+                    content: "Close the dialog",
                     btnProps: {
                         text: "Close",
                         type: Components.ButtonTypes.OutlineSecondary,
@@ -257,7 +257,7 @@ export class Forms {
                     type: Components.FormControlTypes.Dropdown,
                     required: true,
                     items,
-                    errorMessage: "A site url is required."
+                    errorMessage: "A site url is required"
                 } as Components.IFormControlPropsDropdown,
                 {
                     name: "permission",
@@ -278,7 +278,7 @@ export class Forms {
             isSmall: true,
             tooltips: [
                 {
-                    content: "Adds the permission to the site.",
+                    content: "Add the permission to the site",
                     btnProps: {
                         text: "Update",
                         type: Components.ButtonTypes.OutlinePrimary,
@@ -334,7 +334,7 @@ export class Forms {
                                                 // Successfully triggered the flow
                                                 ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
                                                     isValid: true,
-                                                    validMessage: "Flow was run and the item was updated successfully."
+                                                    validMessage: "Flow was run and the item was updated successfully"
                                                 });
 
                                                 // Hide the loading dialog
@@ -361,7 +361,7 @@ export class Forms {
                                         let ctrl = form.getControl("siteUrl");
                                         ctrl.updateValidation(ctrl.el, {
                                             isValid: false,
-                                            invalidMessage: "Error getting the permission for this client id."
+                                            invalidMessage: "Error getting the permission for this App Id"
                                         });
                                     }
                                 });
@@ -370,7 +370,7 @@ export class Forms {
                     }
                 },
                 {
-                    content: "Closes the dialog",
+                    content: "Close the dialog",
                     btnProps: {
                         text: "Close",
                         type: Components.ButtonTypes.OutlineSecondary,
@@ -413,7 +413,7 @@ export class Forms {
                     type: Components.FormControlTypes.Dropdown,
                     required: true,
                     items,
-                    errorMessage: "A site url is required."
+                    errorMessage: "A site url is required"
                 } as Components.IFormControlPropsDropdown
             ]
         });
@@ -424,7 +424,7 @@ export class Forms {
             isSmall: true,
             tooltips: [
                 {
-                    content: "Adds the permission to the site.",
+                    content: "Add the permission to the site",
                     btnProps: {
                         text: "Remove",
                         type: Components.ButtonTypes.OutlinePrimary,
@@ -479,7 +479,7 @@ export class Forms {
                                                 // Successfully triggered the flow
                                                 ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
                                                     isValid: true,
-                                                    validMessage: "Flow was run and the item was updated successfully."
+                                                    validMessage: "Flow was run and the item was updated successfully"
                                                 });
 
                                                 // Add the site url to the item
@@ -525,7 +525,7 @@ export class Forms {
                                         // Set the error
                                         ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
                                             isValid: false,
-                                            invalidMessage: "Error getting the permission for this client id."
+                                            invalidMessage: "Error getting the permission for this App Id"
                                         });
 
                                         // Hide the loading dialog
@@ -537,7 +537,7 @@ export class Forms {
                     }
                 },
                 {
-                    content: "Closes the dialog",
+                    content: "Close the dialog",
                     btnProps: {
                         text: "Close",
                         type: Components.ButtonTypes.OutlineSecondary,
@@ -557,7 +557,7 @@ export class Forms {
         Modal.clear();
 
         // Set the header
-        Modal.setHeader("Remove Site Permission");
+        Modal.setHeader("View Site Permission");
 
         // Parse the site urls
         let items: Components.IDropdownItem[] = [];
@@ -594,7 +594,7 @@ export class Forms {
             isSmall: true,
             tooltips: [
                 {
-                    content: "Views the permission to the site.",
+                    content: "View the permission to the site",
                     btnProps: {
                         text: "View",
                         type: Components.ButtonTypes.OutlinePrimary,
@@ -637,11 +637,11 @@ export class Forms {
                                         columns: [
                                             {
                                                 name: "appName",
-                                                title: "App Name"
+                                                title: "Application"
                                             },
                                             {
                                                 name: "AppId",
-                                                title: "Client Id"
+                                                title: "App Id"
                                             },
                                             {
                                                 name: "permission",
