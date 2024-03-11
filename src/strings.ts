@@ -31,7 +31,7 @@ const Strings = {
     ProjectName: "Entra Site Permission Manager",
     ProjectDescription: "Dashboard to manage site permission requests for apps using the Graph API.",
     SourceUrl: ContextInfo.webServerRelativeUrl,
-    TimeFormat: "YYYY-MMM-DD HH:mm:ss",
+    TimeFormat: "YYYY-MMM-DD[\n]HH:mm:ss",
     Version: "0.0.1"
 };
 export default Strings;
