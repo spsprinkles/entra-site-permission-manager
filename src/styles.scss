@@ -1,4 +1,8 @@
 /** Custom Styles Go Here */
+/* Set text to break on \n */
+.bs .text-break-spaces {
+    white-space: break-spaces;
+}
 /* Fix icon alignment inside nav item buttons */
 #navbar_content ul.navbar-nav li.nav-item a.btn svg {
     margin: .1rem .25rem .088rem -.25rem;
