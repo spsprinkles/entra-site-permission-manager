@@ -268,6 +268,7 @@ export class App {
                         title: "App ID"
                     },
                     {
+                        className: "text-break-spaces",
                         name: "ExpirationDate",
                         title: "Expiration Date",
                         onRenderCell: (el, column, item: IListItem) => {
@@ -306,9 +307,12 @@ export class App {
                         name: "Actions",
                         isHidden: true,
                         onRenderCell: (el, column, item: IListItem) => {
+                            let isOwner = DataSource.isOwner(item);
+                            let sitesExist = (item.SiteUrls || "").trim().length > 0;
+                            let permLinks: Components.IDropdownItem[] = [];
                             let tooltips: Components.ITooltipProps[] = [
                                 {
-                                    content: "View the request",
+                                    content: "View Application",
                                     btnProps: {
                                         text: "View",
                                         type: Components.ButtonTypes.OutlineSecondary,
@@ -320,32 +324,12 @@ export class App {
                                         }
                                     }
                                 }
-                            ]
-
-                            // See if the user is an admin/owner and there are no site urls
-                            let isOwner = DataSource.isOwner(item);
-                            let sitesExist = (item.SiteUrls || "").trim().length > 0;
-                            if ((Security.IsAdmin || isOwner) && !sitesExist) {
-                                tooltips.push({
-                                    content: "Delete the request",
-                                    btnProps: {
-                                        text: "Delete",
-                                        type: Components.ButtonTypes.OutlineDanger,
-                                        onClick: () => {
-                                            // Show the delete form
-                                            Forms.deleteRequest(item, () => {
-                                                // Refresh the dashboard
-                                                this.refresh();
-                                            });
-                                        }
-                                    }
-                                })
-                            }
-
+                            ];
+                            
                             // See if the user is an admin/owner
                             if (Security.IsAdmin || isOwner) {
                                 tooltips.push({
-                                    content: "Edit the request",
+                                    content: "Edit Application",
                                     btnProps: {
                                         text: "Edit",
                                         type: Components.ButtonTypes.OutlinePrimary,
@@ -363,76 +347,101 @@ export class App {
                                 });
                             }
 
+                            // See if the user is an admin/owner and there are no site urls
+                            if ((Security.IsAdmin || isOwner) && !sitesExist) {
+                                tooltips.push({
+                                    content: "Delete Application",
+                                    btnProps: {
+                                        text: "Delete",
+                                        type: Components.ButtonTypes.OutlineDanger,
+                                        onClick: () => {
+                                            // Show the delete form
+                                            Forms.deleteRequest(item, () => {
+                                                // Refresh the dashboard
+                                                this.refresh();
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+
                             // See if the user is a licensed admin
                             if (Security.IsAdmin && DataSource.HasLicense) {
                                 // Adds a permission to a new site collection
-                                tooltips.push({
-                                    content: "Grant access to a site collection",
-                                    btnProps: {
-                                        text: "Add Permission",
-                                        type: Components.ButtonTypes.OutlinePrimary,
-                                        onClick: () => {
-                                            // Show the add form
-                                            Forms.addPermission(item, () => {
-                                                // Refresh the dashboard
-                                                this.refresh(item.Id);
-                                            });
-                                        }
+                                permLinks.push({
+                                    text: "Add Permission",
+                                    title: "Grant access to a site collection",
+                                    onClick: () => {
+                                        // Show the add form
+                                        Forms.addPermission(item, () => {
+                                            // Refresh the dashboard
+                                            this.refresh(item.Id);
+                                        });
                                     }
                                 });
 
                                 // Ensure sites exist
                                 if (sitesExist) {
+                                    // Views the permission of a site collection
+                                    permLinks.push({
+                                        text: "View Permission",
+                                        title: "View access to a site collection",
+                                        onClick: () => {
+                                            // Show the view form
+                                            Forms.viewPermissions(item);
+                                        }
+                                    });
+                                    
                                     // Edits an existing permission to a site collection
-                                    tooltips.push({
-                                        content: "Edit access to a site collection",
-                                        btnProps: {
-                                            text: "Edit Permission",
-                                            type: Components.ButtonTypes.OutlinePrimary,
-                                            onClick: () => {
-                                                // Show the edit form
-                                                Forms.editPermission(item);
-                                            }
+                                    permLinks.push({
+                                        text: "Edit Permission",
+                                        title: "Edit access to a site collection",
+                                        onClick: () => {
+                                            // Show the edit form
+                                            Forms.editPermission(item);
                                         }
                                     });
 
                                     // Removes an existing permission from a site collection
-                                    tooltips.push({
-                                        content: "Remove access to a site collection",
-                                        btnProps: {
-                                            text: "Remove Permission",
-                                            type: Components.ButtonTypes.OutlinePrimary,
-                                            onClick: () => {
-                                                // Show the remove form
-                                                Forms.removePermission(item, () => {
-                                                    // Refresh the dashboard
-                                                    this.refresh(item.Id);
-                                                });
-                                            }
-                                        }
-                                    });
-
-                                    // Views the permission of a site collection
-                                    tooltips.push({
-                                        content: "View access to a site collection",
-                                        btnProps: {
-                                            text: "View Permission",
-                                            type: Components.ButtonTypes.OutlinePrimary,
-                                            onClick: () => {
-                                                // Show the view form
-                                                Forms.viewPermissions(item);
-                                            }
+                                    permLinks.push({
+                                        text: "Remove Permission",
+                                        title: "Remove access to a site collection",
+                                        onClick: () => {
+                                            // Show the remove form
+                                            Forms.removePermission(item, () => {
+                                                // Refresh the dashboard
+                                                this.refresh(item.Id);
+                                            });
                                         }
                                     });
                                 }
                             }
 
-                            // Render a buttons
-                            Components.TooltipGroup({
+                            // Render a tooltip group
+                            let ttg = Components.TooltipGroup({
                                 el,
                                 isSmall: true,
                                 tooltips
                             });
+
+                            if (permLinks.length > 0) {
+                                
+                                let ddl = Components.Dropdown({
+                                    el: ttg.el,
+                                    label: "Permissions",
+                                    type: Components.ButtonTypes.OutlinePrimary,
+                                    items: permLinks,
+                                    onMenuRendering: (props) => {
+                                        // This is the popover. You can further customize from here
+
+                                        // You must return the props
+                                        return props;
+                                    },
+                                });
+                                
+                                let btn = ddl.el.querySelector("button");
+                                btn ? ttg.el.appendChild(btn) && ddl.el.remove() : null;
+                            }
                         }
                     }
                 ]
