@@ -391,13 +391,21 @@ export class App {
                                                     });
                                                 }
                                             }
-                                        ]
+                                        ],
+                                        onMenuRendering: (props) => {
+                                            props.options = {
+                                                theme: "light-border",
+                                                trigger: "click"
+                                            }
+                                            return props;
+                                        }
                                     }
                                 });
 
                                 // Ensure sites exist
                                 if (sitesExist) {
-                                    tooltips[tooltips.length - 1].ddlProps.items.push(
+                                    // Add more dropdown items to the permissions tooltip
+                                    tooltips[tooltips.length - 1].ddlProps?.items.push(
                                         {
                                             // Views the permission of a site collection
                                             text: "View Permission",
