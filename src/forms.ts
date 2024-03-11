@@ -671,6 +671,14 @@ export class Forms {
                             }
                         }
                     }
+                },
+                {
+                    content: "Close the dialog",
+                    btnProps: {
+                        text: "Close",
+                        type: Components.ButtonTypes.OutlineSecondary,
+                        onClick: () => { Modal.hide(); }
+                    }
                 }
             ]
         });
