@@ -163,10 +163,10 @@ export class Forms {
         Modal.clear();
 
         // Set the header
-        Modal.setHeader("Delete Application");
+        Modal.setHeader("Remove Application");
 
         // Set the body
-        Modal.setBody("Are you sure you want to delete this application?");
+        Modal.setBody("Are you sure you want to remove this application?");
 
         // Set the footer
         Components.TooltipGroup({
@@ -174,14 +174,14 @@ export class Forms {
             isSmall: true,
             tooltips: [
                 {
-                    content: "Delete the Application",
+                    content: "Remove the Application",
                     btnProps: {
-                        text: "Delete",
+                        text: "Remove",
                         type: Components.ButtonTypes.OutlinePrimary,
                         onClick: () => {
                             // Show a loading dialog
-                            LoadingDialog.setHeader("Deleting the Application");
-                            LoadingDialog.setBody("This will close after the application is deleted...");
+                            LoadingDialog.setHeader("Removing the Application");
+                            LoadingDialog.setBody("This will close after the application is removed...");
                             LoadingDialog.show();
 
                             // Delete the item
@@ -201,7 +201,7 @@ export class Forms {
                                 // Error
                                 () => {
                                     // Set the body
-                                    Modal.setBody("Error deleting the application. Refresh the page and try again...");
+                                    Modal.setBody("Error removing the application. Refresh the page and try again...");
 
                                     // Hide the dialog
                                     LoadingDialog.hide();

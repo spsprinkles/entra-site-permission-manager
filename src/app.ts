@@ -349,9 +349,9 @@ export class App {
                             // See if the user is an admin/owner and there are no site urls
                             if ((Security.IsAdmin || isOwner) && !sitesExist) {
                                 tooltips.push({
-                                    content: "Delete Application",
+                                    content: "Remove Application",
                                     btnProps: {
-                                        text: "Delete",
+                                        text: "Remove",
                                         type: Components.ButtonTypes.OutlineDanger,
                                         onClick: () => {
                                             // Show the delete form
@@ -404,8 +404,8 @@ export class App {
 
                                 // Ensure sites exist
                                 if (sitesExist) {
-                                    // Add more dropdown items to the permissions tooltip
-                                    tooltips[tooltips.length - 1].ddlProps?.items.push(
+                                    // Insert View Permission first in the dropdown items of the permissions tooltip
+                                    tooltips[tooltips.length - 1].ddlProps?.items.unshift(
                                         {
                                             // Views the permission of a site collection
                                             text: "View Permission",
@@ -421,7 +421,11 @@ export class App {
                                                     type: Components.TooltipTypes.Primary
                                                 });
                                             }
-                                        },
+                                        }
+                                    );
+
+                                    // Add more dropdown items to the permissions tooltip
+                                    tooltips[tooltips.length - 1].ddlProps?.items.push(
                                         {
                                             // Edits an existing permission to a site collection
                                             text: "Edit Permission",
