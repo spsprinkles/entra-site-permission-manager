@@ -1,73 +1,130 @@
-import { Version } from '@microsoft/sp-core-library';
-import {
-  type IPropertyPaneConfiguration,
-  PropertyPaneTextField
-} from '@microsoft/sp-property-pane';
+import { DisplayMode, Environment, Version } from '@microsoft/sp-core-library';
+import { IPropertyPaneConfiguration, PropertyPaneHorizontalRule, PropertyPaneLabel, PropertyPaneLink, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart, WebPartContext } from '@microsoft/sp-webpart-base';
-import type { IReadonlyTheme } from '@microsoft/sp-component-base';
+import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'EntraSitePermMgrWebPartStrings';
 
 export interface IEntraSitePermMgrWebPartProps {
   flowId: string;
+  timeFormat: string;
+  title: string;
+  webUrl: string;
 }
 
 // Reference the solution
 import "../../../../dist/entra-site-permission-manager.js";
 declare const EntraSitePermissionManager: {
+  description: string;
   render: (props: {
     el: HTMLElement,
     context?: WebPartContext;
+    displayMode?: DisplayMode;
+    envType?: number;
     flowId?: string;
-    url?: string;
+    timeFormat?: string;
+    title?: string;
+    sourceUrl?: string;
   }) => void;
+  timeFormat: string;
+  title: string;
+  updateTheme: (currentTheme: Partial<IReadonlyTheme>) => void;
 };
 
 export default class EntraSitePermMgrWebPart extends BaseClientSideWebPart<IEntraSitePermMgrWebPartProps> {
+  private _hasRendered: boolean = false;
 
   public render(): void {
+    // See if have rendered the solution
+    if (this._hasRendered) {
+      // Clear the element
+      while (this.domElement.firstChild) { this.domElement.removeChild(this.domElement.firstChild); }
+    }
+
+    // Set the default property values
+    if (!this.properties.timeFormat) { this.properties.timeFormat = EntraSitePermissionManager.timeFormat; }
+    if (!this.properties.title) { this.properties.title = EntraSitePermissionManager.title; }
+    if (!this.properties.webUrl) { this.properties.webUrl = this.context.pageContext.web.serverRelativeUrl; }
+
     // Render the application
     EntraSitePermissionManager.render({
       el: this.domElement,
       context: this.context,
-      flowId: this.properties.flowId
+      displayMode: this.displayMode,
+      envType: Environment.type,
+      flowId: this.properties.flowId,
+      timeFormat: this.properties.timeFormat,
+      title: this.properties.title,
+      sourceUrl: this.properties.webUrl
     });
-  }
 
-  //protected onInit(): Promise<void> { }
+    // Set the flag
+    this._hasRendered = true;
+  }
 
   protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
     if (!currentTheme) {
       return;
     }
 
-    const {
-      semanticColors
-    } = currentTheme;
-
-    if (semanticColors) {
-      // TODO
-    }
-
+    // Update the theme
+    EntraSitePermissionManager.updateTheme(currentTheme);
   }
 
   protected get dataVersion(): Version {
-    return Version.parse('1.0');
+    return Version.parse(this.context.manifest.version);
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {
-          header: {
-            description: strings.PropertyPaneFlowId
-          },
           groups: [
             {
-              groupName: strings.BasicGroupName,
+              groupName: strings.SettingsGroupName,
               groupFields: [
+                PropertyPaneTextField('title', {
+                  label: strings.TitleFieldLabel,
+                  description: strings.TitleFieldDescription
+                }),
                 PropertyPaneTextField('flowId', {
                   label: strings.FlowIdFieldLabel,
-                  description: "The flow id of the Entra Site Permission Manager flow."
+                  description: strings.FlowIdFieldDescription
+                }),
+                PropertyPaneTextField('timeFormat', {
+                  label: strings.TimeFormatFieldLabel,
+                  description: strings.TimeFormatFieldDescription
+                })
+              ]
+            }
+          ]
+        },
+        {
+          groups: [
+            {
+              groupName: strings.AboutGroupName,
+              groupFields: [
+                PropertyPaneLabel('version', {
+                  text: "Version: " + this.context.manifest.version
+                }),
+                PropertyPaneLabel('description', {
+                  text: EntraSitePermissionManager.description
+                }),
+                PropertyPaneLabel('about', {
+                  text: "We think adding sprinkles to a donut just makes it better! SharePoint Sprinkles builds apps that are sprinkled on top of SharePoint, making your experience even better. Check out our site below to discover other SharePoint Sprinkles apps, or connect with us on GitHub."
+                }),
+                PropertyPaneLabel('support', {
+                  text: "Are you having a problem or do you have a great idea for this app? Visit our GitHub link below to open an issue and let us know!"
+                }),
+                PropertyPaneHorizontalRule(),
+                PropertyPaneLink('supportLink', {
+                  href: "https://www.spsprinkles.com/",
+                  text: "SharePoint Sprinkles",
+                  target: "_blank"
+                }),
+                PropertyPaneLink('sourceLink', {
+                  href: "https://github.com/spsprinkles/entra-site-permission-manager/",
+                  text: "View Source on GitHub",
+                  target: "_blank"
                 })
               ]
             }
