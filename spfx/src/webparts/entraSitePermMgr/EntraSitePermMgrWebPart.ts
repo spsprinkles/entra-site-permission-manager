@@ -12,7 +12,7 @@ export interface IEntraSitePermMgrWebPartProps {
 }
 
 // Reference the solution
-import "../../../../dist/entra-site-permission-manager.js";
+import "../../../../dist/entra-site-permission-manager.min.js";
 declare const EntraSitePermissionManager: {
   description: string;
   render: (props: {
@@ -74,6 +74,8 @@ export default class EntraSitePermMgrWebPart extends BaseClientSideWebPart<IEntr
     return Version.parse(this.context.manifest.version);
   }
 
+  protected get disableReactivePropertyChanges(): boolean { return true; }
+  
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
