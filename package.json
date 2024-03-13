@@ -1,7 +1,7 @@
 {
   "name": "entra-site-permission-manager",
-  "version": "1.0.0",
-  "description": "Dashboard to help apply/remove graph api permissions from site collections.",
+  "version": "0.0.1",
+  "description": "A dashboard to manage site permission requests for apps using Graph API.",
   "main": "src/index.ts",
   "scripts": {
     "all": "npm run clean && npm run build && npm run prod && npm run flow && npm run spfx",
@@ -17,7 +17,7 @@
   "dependencies": {
     "datatables.net": "^1.13.10",
     "datatables.net-bs5": "^1.13.10",
-    "dattatable": "^2.9.88",
+    "dattatable": "^2.9.89",
     "gd-sprest-bs": "^10.11.42",
     "jquery": "^3.7.1",
     "moment": "^2.30.1"
