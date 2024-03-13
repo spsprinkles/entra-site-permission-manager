@@ -15,6 +15,7 @@ export interface IEntraSitePermMgrWebPartProps {
 import "../../../../dist/entra-site-permission-manager.min.js";
 declare const EntraSitePermissionManager: {
   description: string;
+  getLogo: () => SVGImageElement;
   render: (props: {
     el: HTMLElement,
     context?: WebPartContext;
@@ -61,6 +62,20 @@ export default class EntraSitePermMgrWebPart extends BaseClientSideWebPart<IEntr
     this._hasRendered = true;
   }
 
+  // Add the logo to the PropertyPane Settings panel
+  protected onPropertyPaneRendered(): void {
+    const setLogo = setInterval(() => {
+      let closeBtn = document.querySelectorAll("div.spPropertyPaneContainer div[aria-label='Entra Site Permission Manager property pane'] button[data-automation-id='propertyPaneClose']");
+      if (closeBtn) {
+        closeBtn.forEach((el: HTMLElement) => {
+          let parent = el.parentElement;
+          if (parent && !(parent.firstChild as HTMLElement).classList.contains("logo")) { parent.prepend(EntraSitePermissionManager.getLogo()) }
+        });
+        clearInterval(setLogo);
+      }
+    }, 50);
+  }
+
   protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
     if (!currentTheme) {
       return;
@@ -75,7 +90,7 @@ export default class EntraSitePermMgrWebPart extends BaseClientSideWebPart<IEntr
   }
 
   protected get disableReactivePropertyChanges(): boolean { return true; }
-  
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [

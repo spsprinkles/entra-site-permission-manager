@@ -2,6 +2,7 @@ import { LoadingDialog, waitForTheme } from "dattatable";
 import { ContextInfo, ThemeManager } from "gd-sprest-bs";
 import { App } from "./app";
 import { Configuration } from "./cfg";
+import { getEntraIcon } from "./common"
 import { DataSource } from "./ds";
 import { InstallationModal } from "./install";
 import { Security } from "./security";
@@ -27,6 +28,7 @@ const GlobalVariable = {
     App: null,
     Configuration,
     description: Strings.ProjectDescription,
+    getLogo: () => { return getEntraIcon(28, 28, 'brand logo me-2'); },
     render: (props: IProps) => {
         // See if the page context exists
         if (props.context) {
