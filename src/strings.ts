@@ -29,7 +29,7 @@ const Strings = {
         Main: "Site Manager"
     },
     ProjectName: "Entra Site Permission Manager",
-    ProjectDescription: "Dashboard to manage site permission requests for apps using the Graph API.",
+    ProjectDescription: "A dashboard to manage site permission requests for apps using Graph API.",
     SourceUrl: ContextInfo.webServerRelativeUrl,
     TimeFormat: "YYYY-MMM-DD[\n]HH:mm:ss",
     Version: "0.0.1"
