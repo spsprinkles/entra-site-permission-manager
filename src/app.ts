@@ -468,6 +468,7 @@ export class App {
                             // Render a tooltip group
                             Components.TooltipGroup({
                                 el,
+                                className: "bg-white",
                                 isSmall: true,
                                 tooltips
                             });
