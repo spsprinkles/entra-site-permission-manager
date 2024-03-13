@@ -93,7 +93,7 @@ export class Forms {
 
                                                     // Update the value
                                                     item.update({
-                                                        SiteUrls: siteUrls.join('\n')
+                                                        SiteUrls: siteUrls.join('\n').replace(/^\n|\n$/g, "")
                                                     }).execute(() => {
                                                         // Error getting the site
                                                         ctrlSiteUrl.updateValidation(ctrlSiteUrl.el, {
@@ -495,7 +495,7 @@ export class Forms {
 
                                                     // Update the value
                                                     item.update({
-                                                        SiteUrls: siteUrls.join('\n')
+                                                        SiteUrls: siteUrls.join('\n').replace(/^\n|\n$/g, "")
                                                     }).execute(() => {
                                                         // Call the event
                                                         onUpdate();
