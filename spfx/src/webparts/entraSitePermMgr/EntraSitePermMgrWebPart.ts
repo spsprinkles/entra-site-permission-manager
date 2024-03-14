@@ -42,7 +42,7 @@ export default class EntraSitePermMgrWebPart extends BaseClientSideWebPart<IEntr
     }
 
     // Set the default property values
-    if (!this.properties.timeFormat) { this.properties.timeFormat = EntraSitePermissionManager.timeFormat; }
+    if (!this.properties.timeFormat) { this.properties.timeFormat = EntraSitePermissionManager.timeFormat?.replace(/\n/g, "\\n"); }
     if (!this.properties.title) { this.properties.title = EntraSitePermissionManager.title; }
     if (!this.properties.webUrl) { this.properties.webUrl = this.context.pageContext.web.serverRelativeUrl; }
 
