@@ -1,5 +1,6 @@
 declare interface IEntraSitePermMgrWebPartStrings {
   AboutGroupName: string;
+  CloudEnvironmentFieldLabel: string;
   FlowIdFieldDescription: string;
   FlowIdFieldLabel: string;
   SettingsGroupName: string;

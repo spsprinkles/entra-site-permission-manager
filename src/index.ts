@@ -1,5 +1,5 @@
 import { LoadingDialog, waitForTheme } from "dattatable";
-import { ContextInfo, ThemeManager } from "gd-sprest-bs";
+import { ContextInfo, SPTypes, ThemeManager } from "gd-sprest-bs";
 import { App } from "./app";
 import { Configuration } from "./cfg";
 import { getEntraIcon } from "./common"
@@ -15,6 +15,7 @@ import "./styles.scss";
 interface IProps {
     el: HTMLElement,
     context?: any;
+    cloudEnv?: string;
     displayMode?: number;
     envType?: number;
     flowId?: string;
@@ -28,6 +29,7 @@ const GlobalVariable = {
     App: null,
     Configuration,
     description: Strings.ProjectDescription,
+    getCloudEnvironments: () => { return SPTypes.CloudEnvironment },
     getLogo: () => { return getEntraIcon(28, 28, 'brand logo me-2'); },
     render: (props: IProps) => {
         // See if the page context exists
@@ -38,6 +40,9 @@ const GlobalVariable = {
             // Update the configuration
             Configuration.setWebUrl(props.sourceUrl || ContextInfo.webServerRelativeUrl);
         }
+
+        // Set the Cloud Environment
+        props.cloudEnv ? Strings.CloudEnv = SPTypes.CloudEnvironment[props.cloudEnv] : null;
 
         // Set the flow id
         props.flowId ? setFlowId(props.flowId) : null;

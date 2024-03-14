@@ -1,6 +1,7 @@
 define([], function() {
   return {
     "AboutGroupName": "About this app:",
+    "CloudEnvironmentFieldLabel": "Cloud Environment",
     "FlowIdFieldDescription": "The flow id of the Entra Site Permission Manager flow.",
     "FlowIdFieldLabel": "Flow Id",
     "SettingsGroupName": "Settings:",
