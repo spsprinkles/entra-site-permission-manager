@@ -32,6 +32,6 @@ const Strings = {
     ProjectDescription: "A dashboard to manage site permission requests for apps using Graph API.",
     SourceUrl: ContextInfo.webServerRelativeUrl,
     TimeFormat: "YYYY-MMM-DD[\n]HH:mm:ss",
-    Version: "0.0.1"
+    Version: "0.0.2"
 };
 export default Strings;

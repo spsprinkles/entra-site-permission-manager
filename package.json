@@ -1,6 +1,6 @@
 {
   "name": "entra-site-permission-manager",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A dashboard to manage site permission requests for apps using Graph API.",
   "main": "src/index.ts",
   "scripts": {

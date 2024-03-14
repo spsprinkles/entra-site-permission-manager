@@ -3,7 +3,7 @@
   "solution": {
     "name": "Entra Site Permission Manager",
     "id": "3c357808-a6be-44f8-a913-c7eb7e99f6b7",
-    "version": "0.0.1.0",
+    "version": "0.0.2.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
