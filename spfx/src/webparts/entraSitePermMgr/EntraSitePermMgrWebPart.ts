@@ -53,7 +53,7 @@ export default class EntraSitePermMgrWebPart extends BaseClientSideWebPart<IEntr
       displayMode: this.displayMode,
       envType: Environment.type,
       flowId: this.properties.flowId,
-      timeFormat: this.properties.timeFormat,
+      timeFormat: this.properties.timeFormat?.replace(/\\n/g, "\n"),
       title: this.properties.title,
       sourceUrl: this.properties.webUrl
     });
